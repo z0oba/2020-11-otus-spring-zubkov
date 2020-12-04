@@ -8,11 +8,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.homework.dao.QuestionDao;
 import ru.otus.homework.domain.Question;
+import ru.otus.homework.exceptions.QuestionDaoException;
 import ru.otus.homework.service.QuestionService;
 import ru.otus.homework.service.QuestionServiceImp;
+import ru.otus.homework.utils.QuestionPrinter;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 
@@ -22,11 +25,14 @@ public class QuestionServiceImpTests {
     @Mock
     private QuestionDao questionDao;
 
+    @Mock
+    private QuestionPrinter questionPrinter;
+
     private QuestionService questionService;
 
     @BeforeEach
     void setUp() {
-        questionService = new QuestionServiceImp(questionDao);
+        questionService = new QuestionServiceImp(questionDao, questionPrinter);
     }
 
     @Test
@@ -52,5 +58,19 @@ public class QuestionServiceImpTests {
 
         Assertions.assertNotNull(questionService.getByNumber(3));
         Assertions.assertEquals(testQuestion, questionService.getByNumber(3));
+    }
+
+    @Test
+    void getQuestionByNegativeNumber() {
+        int number = -100;
+        String exceptionMessage = "Can`t find question with number ";
+
+        given(questionDao.findByNumber(-100)).willThrow(new QuestionDaoException(exceptionMessage + number));
+
+        Exception exception = assertThrows(QuestionDaoException.class, () -> {
+            questionService.getByNumber(-100);
+        });
+
+        Assertions.assertEquals(exceptionMessage + number, exception.getMessage());
     }
 }

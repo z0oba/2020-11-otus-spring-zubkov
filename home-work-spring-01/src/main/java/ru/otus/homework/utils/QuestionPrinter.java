@@ -4,13 +4,13 @@ import ru.otus.homework.domain.Question;
 
 import java.util.List;
 
-public final class QuestionPrinter {
+public class QuestionPrinter {
 
     private static final String DEFAULT_QUESTION_PREFIX = "Question :";
     private static final String DEFAULT_ANSWERS_PREFIX = "Answers :";
     private static final String DEFAULT_EMPTY_ANSWER = "your answer";
 
-    public static void printQuestion(List<Question> questions){
+    public void printQuestion(List<Question> questions) {
         for (Question question : questions) {
             System.out.println(DEFAULT_QUESTION_PREFIX + question.getQuestion());
             System.out.println(DEFAULT_ANSWERS_PREFIX);

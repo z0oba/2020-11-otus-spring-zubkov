@@ -1,6 +1,7 @@
 package ru.otus.homework.utils;
 
 import ru.otus.homework.domain.Question;
+import ru.otus.homework.exceptions.QuestionReaderException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,9 +13,15 @@ import java.util.List;
 
 public final class QuestionReader {
 
-    private static final String DELIMITER = ":";
+    private final String delimiter;
+    private final String questionFile;
 
-    public static List<Question> readQuestions(String questionFile) {
+    public QuestionReader(String delimiter, String questionFile) {
+        this.delimiter = delimiter;
+        this.questionFile = questionFile;
+    }
+
+    public List<Question> readQuestions() throws QuestionReaderException {
 
         List<Question> questions = new ArrayList<>();
         ClassLoader classLoader = QuestionReader.class.getClassLoader();
@@ -25,7 +32,7 @@ public final class QuestionReader {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                List<String> strings = List.of(line.split(DELIMITER));
+                List<String> strings = List.of(line.split(delimiter));
                 questions.add(
                         new Question(
                                 strings.get(0),
@@ -34,7 +41,7 @@ public final class QuestionReader {
                 );
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new QuestionReaderException("Can`t read questions: " + e.getMessage());
         }
         return questions;
     }
