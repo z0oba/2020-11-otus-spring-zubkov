@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="questionDao" class="ru.otus.homework.dao.QuestionDaoImp">
+        <constructor-arg name="questionReader" ref="questionReader"/>
+    </bean>
+
+    <bean id="questionService" class="ru.otus.homework.service.QuestionServiceImp">
+        <constructor-arg name="dao" ref="questionDao"/>
+        <constructor-arg name="printer" ref="questionPrinter"/>
+
+    </bean>
+
+    <bean id="questionReader" class="ru.otus.homework.utils.QuestionReader">
+        <constructor-arg name="delimiter" value=":"/>
+        <constructor-arg name="questionFile" value="test-questions.csv"/>
+    </bean>
+
+    <bean id="questionPrinter" class="ru.otus.homework.utils.QuestionPrinter" />
+</beans>
