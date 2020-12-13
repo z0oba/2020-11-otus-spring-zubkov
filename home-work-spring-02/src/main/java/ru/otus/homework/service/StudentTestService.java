@@ -1,5 +1,5 @@
 package ru.otus.homework.service;
 
-public interface TestingService {
+public interface StudentTestService {
     void startTestingSession();
 }

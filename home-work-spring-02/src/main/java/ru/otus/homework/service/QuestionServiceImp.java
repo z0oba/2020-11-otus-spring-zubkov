@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.homework.dao.QuestionDao;
 import ru.otus.homework.domain.Question;
+import ru.otus.homework.printer.QuestionPrinterService;
 
 import java.util.List;
 
@@ -27,10 +28,5 @@ public class QuestionServiceImp implements QuestionService {
     @Override
     public List<Question> getQuestions() {
         return dao.findAll();
-    }
-
-    @Override
-    public void printQuestions() {
-        printer.printQuestion(dao.findAll()); //print all questions
     }
 }

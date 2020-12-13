@@ -1,6 +1,5 @@
 package ru.otus.homework.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.homework.domain.Question;
 import ru.otus.homework.exceptions.QuestionDaoException;
@@ -13,7 +12,6 @@ public class QuestionDaoImp implements QuestionDao {
 
     private final QuestionReader questionReader;
 
-    @Autowired
     public QuestionDaoImp(QuestionReader questionReader) {
         this.questionReader = questionReader;
     }

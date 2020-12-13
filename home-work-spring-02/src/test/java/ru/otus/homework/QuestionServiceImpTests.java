@@ -11,7 +11,7 @@ import ru.otus.homework.domain.Question;
 import ru.otus.homework.exceptions.QuestionDaoException;
 import ru.otus.homework.service.QuestionService;
 import ru.otus.homework.service.QuestionServiceImp;
-import ru.otus.homework.service.QuestionPrinterService;
+import ru.otus.homework.printer.QuestionPrinterService;
 
 import java.util.List;
 

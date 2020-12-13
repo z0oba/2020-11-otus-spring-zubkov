@@ -4,7 +4,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import ru.otus.homework.service.TestingService;
+import ru.otus.homework.service.StudentTestService;
 
 @PropertySource("application.properties")
 @Configuration
@@ -14,9 +14,8 @@ public class Application {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Application.class);
 
         //start testing
-        TestingService testingService = context.getBean(TestingService.class);
-        testingService.startTestingSession();
-
+        StudentTestService studentTestService = context.getBean(StudentTestService.class);
+        studentTestService.startTestingSession();
         context.close();
     }
 }
