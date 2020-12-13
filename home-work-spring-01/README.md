@@ -28,4 +28,4 @@
 
 ### Для сборки исполняемого jar
 Выполняем таску jar, которая добавляет в итоговый .jar необходимые зависимости и прописывает точкой входа класс 
-"ru.otus.homework.Application" 
+"ru.otus.homework.TestingApplication" 

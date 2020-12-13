@@ -1,0 +1,12 @@
+csv:
+  delimiter: ":"
+  file: test-questions.csv
+
+error:
+  limit: 3
+
+string:
+  formatter:
+    delimiter: ")"
+
+locale: en
