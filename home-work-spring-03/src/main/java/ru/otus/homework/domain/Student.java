@@ -7,10 +7,8 @@ import lombok.Setter;
 @Setter
 public class Student {
     private final String fullName;
-    private final TestResult testResult;
 
-    public Student(String fullName, TestResult testResult) {
+    public Student(String fullName) {
         this.fullName = fullName;
-        this.testResult = testResult;
     }
 }

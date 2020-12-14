@@ -1,12 +1,9 @@
-csv:
-  delimiter: ":"
-  file: test-questions.csv
-
-error:
-  limit: 3
-
 string:
   formatter:
     delimiter: ")"
 
-locale: en
+application:
+  locale: en
+  delimiter: ":"
+  file: test-questions.csv
+  errorLimit: 3

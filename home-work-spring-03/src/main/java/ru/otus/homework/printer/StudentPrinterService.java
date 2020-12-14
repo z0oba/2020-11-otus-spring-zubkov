@@ -3,28 +3,40 @@ package ru.otus.homework.printer;
 import org.springframework.stereotype.Service;
 import ru.otus.homework.configs.MessageSourceImp;
 import ru.otus.homework.domain.Student;
-import ru.otus.homework.io.IOService;
+import ru.otus.homework.io.IOServiceImp;
+import ru.otus.homework.io.printer.PrinterService;
+
+import java.util.List;
 
 @Service
-public class StudentPrinterService {
+public class StudentPrinterService implements PrinterService<Student> {
 
     private static final String DEFAULT_FOR_STUDENT_MESSAGE = "For student : ";
 
-    private final IOService ioService;
+    private final IOServiceImp ioServiceImp;
     private final MessageSourceImp messageSource;
-    private final TestResultPrinterService testResultPrinterService;
 
-    public StudentPrinterService(IOService ioService, MessageSourceImp messageSource, TestResultPrinterService testResultPrinterService) {
-        this.ioService = ioService;
+    public StudentPrinterService(IOServiceImp ioServiceImp, MessageSourceImp messageSource) {
+        this.ioServiceImp = ioServiceImp;
         this.messageSource = messageSource;
-        this.testResultPrinterService = testResultPrinterService;
     }
 
-    public void printTestResultForStudent(Student student){
-        ioService.printBorder();
-        ioService.printItem(
+    public void printTestResultForStudent(Student student) {
+
+    }
+
+    @Override
+    public void printAll(List<Student> students) {
+        for (Student student : students) {
+            printItem(student);
+        }
+    }
+
+    @Override
+    public void printItem(Student student) {
+        ioServiceImp.printBorder();
+        ioServiceImp.printItem(
                 messageSource.getMessage("for.student.message", DEFAULT_FOR_STUDENT_MESSAGE) + student.getFullName()
         );
-        testResultPrinterService.printItem(student.getTestResult());
     }
 }

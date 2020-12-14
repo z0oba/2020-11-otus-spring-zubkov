@@ -3,7 +3,7 @@ package ru.otus.homework.printer;
 import org.springframework.stereotype.Service;
 import ru.otus.homework.configs.MessageSourceImp;
 import ru.otus.homework.domain.Question;
-import ru.otus.homework.io.IOService;
+import ru.otus.homework.io.IOServiceImp;
 import ru.otus.homework.io.printer.PrinterService;
 import ru.otus.homework.utils.NumberedStringFormatter;
 
@@ -17,33 +17,33 @@ public class QuestionPrinterService implements PrinterService<Question> {
     private static final String DEFAULT_EMPTY_ANSWER = "Your answer";
     private static final String DEFAULT_PRINT_ALL_QUESTIONS_HEADLINE = "All questions with answers : ";
 
-    private final IOService ioService;
+    private final IOServiceImp ioServiceImp;
     private final NumberedStringFormatter formatter;
     private final MessageSourceImp messageSource;
 
-    public QuestionPrinterService(IOService ioService, NumberedStringFormatter formatter, MessageSourceImp messageSource) {
-        this.ioService = ioService;
+    public QuestionPrinterService(IOServiceImp ioServiceImp, NumberedStringFormatter formatter, MessageSourceImp messageSource) {
+        this.ioServiceImp = ioServiceImp;
         this.formatter = formatter;
         this.messageSource = messageSource;
     }
 
     @Override
     public void printAll(List<Question> questions) {
-        ioService.printBorder();
-        ioService.printItem(messageSource.getMessage("all.questions.headline", DEFAULT_PRINT_ALL_QUESTIONS_HEADLINE));
-        ioService.printBorder();
+        ioServiceImp.printBorder();
+        ioServiceImp.printItem(messageSource.getMessage("all.questions.headline", DEFAULT_PRINT_ALL_QUESTIONS_HEADLINE));
+        ioServiceImp.printBorder();
         for (Question question : questions) {
             printItem(question);
         }
-        ioService.printBorder();
+        ioServiceImp.printBorder();
     }
 
     @Override
     public void printItem(Question question){
-        ioService.printItem(
+        ioServiceImp.printItem(
                 messageSource.getMessage("question.prefix", DEFAULT_QUESTION_PREFIX) + question.getQuestion()
         );
-        ioService.printItem(
+        ioServiceImp.printItem(
                 messageSource.getMessage("answers.prefix", DEFAULT_ANSWERS_PREFIX)
         );
 
@@ -52,11 +52,11 @@ public class QuestionPrinterService implements PrinterService<Question> {
             for (String answer : question.getAnswers()) {
                 if(answer ==  null || answer.trim().isEmpty() )
                     answer = messageSource.getMessage("empty.answer", DEFAULT_EMPTY_ANSWER);
-                ioService.printItem(formatter.toNumberedString(counter, answer));
+                ioServiceImp.printItem(formatter.toNumberedString(counter, answer));
                 ++counter;
             }
         } else {
-            ioService.printItem(DEFAULT_EMPTY_ANSWER);
+            ioServiceImp.printItem(DEFAULT_EMPTY_ANSWER);
         }
     }
 }

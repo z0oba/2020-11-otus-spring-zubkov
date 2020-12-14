@@ -1,6 +1,6 @@
 package ru.otus.homework.configs;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
@@ -13,10 +13,11 @@ import java.util.Locale;
 public class MessageSourceImp implements MessageSource {
 
     private final ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
-    private final Locale locale;
+    private final AppConfig appConfig;
 
-    public MessageSourceImp(@Value("${locale}")Locale locale){
-        this.locale = locale;
+    @Autowired
+    public MessageSourceImp(AppConfig appConfig) {
+        this.appConfig = appConfig;
         ms.setBasename("classpath:/bundle");
         ms.setDefaultEncoding("UTF-8");
     }
@@ -37,7 +38,7 @@ public class MessageSourceImp implements MessageSource {
     }
 
     public String getMessage(String code, String defaultMessage) {
-        return ms.getMessage(code, null, defaultMessage, locale);
+        return ms.getMessage(code, null, defaultMessage, appConfig.getLocale());
     }
 
     public String getFile(String code, Locale locale){
@@ -45,7 +46,7 @@ public class MessageSourceImp implements MessageSource {
     }
 
     public String getFile(String code){
-        return ms.getMessage(code, null, locale);
+        return ms.getMessage(code, null, appConfig.getLocale());
     }
 
     public String getFile(String code, String defaultMessage, Locale locale){
@@ -53,6 +54,6 @@ public class MessageSourceImp implements MessageSource {
     }
 
     public String getFile(String code, String defaultMessage){
-        return ms.getMessage(code, null, defaultMessage, locale);
+        return ms.getMessage(code, null, defaultMessage, appConfig.getLocale());
     }
 }

@@ -1,9 +1,7 @@
 package ru.otus.homework.dao;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
-import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Service;
+import ru.otus.homework.configs.AppConfig;
 import ru.otus.homework.configs.MessageSourceImp;
 import ru.otus.homework.domain.Question;
 import ru.otus.homework.exceptions.QuestionReaderException;
@@ -14,19 +12,16 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class QuestionReader {
 
-    private final String delimiter;
-    private final String questionFile;
     private final MessageSourceImp messageSource;
+    private final AppConfig appConfig;
 
-    public QuestionReader(@Value("${csv.delimiter}") String delimiter, @Value("${csv.file}") String questionFile, MessageSource messageSource, MessageSourceImp messageSource1) {
-        this.delimiter = delimiter;
-        this.questionFile = questionFile;
-        this.messageSource = messageSource1;
+    public QuestionReader(MessageSourceImp messageSource, AppConfig appConfig) {
+        this.messageSource = messageSource;
+        this.appConfig = appConfig;
     }
 
     public List<Question> readQuestions() throws QuestionReaderException {
@@ -35,7 +30,7 @@ public class QuestionReader {
         ClassLoader classLoader = QuestionReader.class.getClassLoader();
 
         //get localized or default csv file
-        String csvFile =  messageSource.getFile("csv.file", questionFile);
+        String csvFile = messageSource.getFile("csv.file", appConfig.getFile());
 
         try (InputStream inputStream = classLoader.getResourceAsStream(csvFile);
              InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
@@ -43,7 +38,7 @@ public class QuestionReader {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                List<String> strings = List.of(line.split(delimiter));
+                List<String> strings = List.of(line.split(appConfig.getDelimiter()));
                 if (strings.size() < 3)
                     throw new QuestionReaderException("Incorrect csv line, need more than " + strings.size() + "elements");
                 questions.add(

@@ -1,15 +1,18 @@
 package ru.otus.homework.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
+import ru.otus.homework.configs.AppConfig;
 import ru.otus.homework.configs.MessageSourceImp;
 import ru.otus.homework.domain.Question;
 import ru.otus.homework.domain.Student;
 import ru.otus.homework.domain.TestResult;
-import ru.otus.homework.io.IOService;
-import ru.otus.homework.printer.StudentPrinterService;
+import ru.otus.homework.io.IOServiceImp;
+import ru.otus.homework.printer.QuestionPrinterService;
+import ru.otus.homework.printer.TestResultPrinterService;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -20,41 +23,33 @@ public class StudentTestServiceImp implements StudentTestService, CommandLineRun
 
     private final static String DEFAULT_STUDENT_TEST_GREETING_MESSAGE = "Welcome for student testing program!";
 
-    private final int errorLimit;
-    private final IOService ioService;
+    private final QuestionPrinterService questionPrinterService;
+    private final IOServiceImp ioServiceImp;
     private final QuestionService questionService;
     private final CollectNameService collectNameService;
-    private final CollectTestAnswersService collectTestAnswersService;
-    private final CheckTestAnswersService checkTestAnswersService;
-    private final CheckErrorLimitService checkErrorLimitService;
-    private final StudentPrinterService studentPrinterService;
+    private final TestResultPrinterService testResultPrinterService;
     private final MessageSourceImp messageSource;
+    private final AppConfig appConfig;
 
     public StudentTestServiceImp(
-            @Value("${error.limit}") int errorLimit,
-            IOService ioService, QuestionService questionService,
+            QuestionPrinterService questionPrinterService, IOServiceImp ioServiceImp, QuestionService questionService,
             CollectNameService collectNameService,
-            CollectTestAnswersService collectTestAnswersService,
-            CheckTestAnswersService checkTestAnswersService,
-            CheckErrorLimitService checkErrorLimitService,
-            StudentPrinterService studentPrinterService, MessageSourceImp messageSource) {
-        this.ioService = ioService;
+            TestResultPrinterService testResultPrinterService, MessageSourceImp messageSource, AppConfig appConfig) {
+        this.questionPrinterService = questionPrinterService;
+        this.ioServiceImp = ioServiceImp;
         this.questionService = questionService;
-        this.errorLimit = errorLimit;
         this.collectNameService = collectNameService;
-        this.collectTestAnswersService = collectTestAnswersService;
-        this.checkTestAnswersService = checkTestAnswersService;
-        this.checkErrorLimitService = checkErrorLimitService;
-        this.studentPrinterService = studentPrinterService;
+        this.testResultPrinterService = testResultPrinterService;
         this.messageSource = messageSource;
+        this.appConfig = appConfig;
     }
 
     @Override
     public void startTestingSession() {
 
         //print test greetings
-        ioService.printBorder();
-        ioService.printItem(messageSource.getMessage("student.test.greeting.message", DEFAULT_STUDENT_TEST_GREETING_MESSAGE));
+        ioServiceImp.printBorder();
+        ioServiceImp.printItem(messageSource.getMessage("student.test.greeting.message", DEFAULT_STUDENT_TEST_GREETING_MESSAGE));
 
         //get user full name
         String name = collectNameService.collectName();
@@ -63,26 +58,63 @@ public class StudentTestServiceImp implements StudentTestService, CommandLineRun
         List<Question> questions = questionService.getQuestions();
 
         //get user answers
-        List<String> answers = collectTestAnswersService.collectAnswers(questions);
+        List<String> answers = collectTestAnswers(questions);
 
         //get checked test answers results
-        List<Boolean> results = checkTestAnswersService.getResultList(questions, answers);
+        List<Boolean> results = checkTestAnswers(questions, answers);
 
         //check for error limit
-        boolean isPassed = !checkErrorLimitService.isLimitExceeded(errorLimit, results);
-
-        //test result for student
-        Student student = new Student(
-                name,
-                new TestResult(questions, answers, results, isPassed, errorLimit)
-        );
+        boolean isPassed = !checkErrorLimit(appConfig.getErrorLimit(), results);
 
         //print test result for student
-        studentPrinterService.printTestResultForStudent(student);
+        testResultPrinterService.printItem(
+                new TestResult(new Student(name), questions, answers, results, isPassed, appConfig.getErrorLimit())
+        );
     }
 
     @Override
-    public void run(String... args){
+    public boolean checkErrorLimit(int errorLimit, List<Boolean> results) {
+        int counter = 0;
+        for (Boolean result : results) {
+            if (!result)
+                ++counter;
+            if (counter > errorLimit)
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<Boolean> checkTestAnswers(List<Question> questions, List<String> answers) {
+        List<Boolean> results = new ArrayList<>();
+
+        Iterator<Question> questionsIterator = questions.iterator();
+        Iterator<String> answersIterator = answers.iterator();
+
+        while (questionsIterator.hasNext() && answersIterator.hasNext()) {
+            results.add(
+                    questionsIterator.next().getCorrectAnswer().trim().toLowerCase().equals(
+                            answersIterator.next().trim().toLowerCase()
+                    )
+            );
+        }
+        return results;
+    }
+
+    @Override
+    public List<String> collectTestAnswers(List<Question> questions) {
+        List<String> answers = new ArrayList<>();
+        for (Question question : questions) {
+            ioServiceImp.printBorder();
+            questionPrinterService.printItem(question);
+            answers.add(ioServiceImp.readItem());
+            ioServiceImp.printBorder();
+        }
+        return answers;
+    }
+
+    @Override
+    public void run(String... args) {
         startTestingSession();
     }
 }
