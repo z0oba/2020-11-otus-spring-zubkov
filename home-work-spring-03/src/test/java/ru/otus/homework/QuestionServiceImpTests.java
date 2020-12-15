@@ -1,17 +1,20 @@
 package ru.otus.homework;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.TestPropertySource;
+import ru.otus.homework.configs.AppConfig;
 import ru.otus.homework.dao.QuestionDao;
 import ru.otus.homework.domain.Question;
 import ru.otus.homework.exceptions.QuestionDaoException;
 import ru.otus.homework.service.QuestionService;
-import ru.otus.homework.service.QuestionServiceImp;
-import ru.otus.homework.printer.QuestionPrinterService;
+import ru.otus.homework.service.StudentTestServiceImp;
 
 import java.util.List;
 
@@ -20,20 +23,16 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
+@EnableConfigurationProperties(AppConfig.class)
+@SpringBootTest(classes = StudentTestServiceImp.class)
+@TestPropertySource(locations = "classpath:application.yaml")
 public class QuestionServiceImpTests {
 
-    @Mock
+    @MockBean
     private QuestionDao questionDao;
 
-    @Mock
-    private QuestionPrinterService questionPrinter;
-
+    @Autowired
     private QuestionService questionService;
-
-    @BeforeEach
-    void setUp() {
-        questionService = new QuestionServiceImp(questionDao, questionPrinter);
-    }
 
     @Test
     void getQuestions() {

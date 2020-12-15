@@ -44,7 +44,7 @@ public class TestResultPrinterService implements PrinterService<TestResult> {
     @Override
     public void printItem(TestResult testResult) {
 
-        studentPrinterService.printTestResultForStudent(testResult.getStudent());
+        studentPrinterService.printItem(testResult.getStudent());
 
         ioServiceImp.printBorder();
         ioServiceImp.printItem(messageSource.getMessage("results.message", DEFAULT_RESULTS_MESSAGE));

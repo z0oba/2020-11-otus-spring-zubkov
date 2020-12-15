@@ -2,8 +2,10 @@ string:
   formatter:
     delimiter: ")"
 
+
 application:
   locale: en
   delimiter: ":"
   file: test-questions.csv
   errorLimit: 3
+  stringFormatterDelimiter: ")"

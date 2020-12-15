@@ -10,10 +10,11 @@ import java.util.Locale;
 @Setter
 @ConfigurationProperties(prefix = "application")
 public class AppConfig {
-    private Locale locale;
 
+    private Locale locale;
     private String delimiter;
     private String file;
-
     private int errorLimit;
+
+    private String stringFormatterDelimiter;
 }

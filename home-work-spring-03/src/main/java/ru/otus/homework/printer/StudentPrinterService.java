@@ -21,10 +21,6 @@ public class StudentPrinterService implements PrinterService<Student> {
         this.messageSource = messageSource;
     }
 
-    public void printTestResultForStudent(Student student) {
-
-    }
-
     @Override
     public void printAll(List<Student> students) {
         for (Student student : students) {

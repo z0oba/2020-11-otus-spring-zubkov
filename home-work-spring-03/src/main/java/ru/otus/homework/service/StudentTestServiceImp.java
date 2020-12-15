@@ -1,7 +1,10 @@
 package ru.otus.homework.service;
 
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.stereotype.Service;
+import ru.otus.homework.Application;
+import ru.otus.homework.StudentTestRunner;
 import ru.otus.homework.configs.AppConfig;
 import ru.otus.homework.configs.MessageSourceImp;
 import ru.otus.homework.domain.Question;
@@ -19,26 +22,28 @@ import java.util.List;
  * Service for testing students
  */
 @Service
-public class StudentTestServiceImp implements StudentTestService, CommandLineRunner {
+@ComponentScan(basePackages = {"ru.otus.homework.**"},
+        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = {Application.class, StudentTestRunner.class})})
+public class StudentTestServiceImp implements StudentTestService {
 
     private final static String DEFAULT_STUDENT_TEST_GREETING_MESSAGE = "Welcome for student testing program!";
 
     private final QuestionPrinterService questionPrinterService;
     private final IOServiceImp ioServiceImp;
     private final QuestionService questionService;
-    private final CollectNameService collectNameService;
+    private final CollectNameServiceImp collectNameServiceImp;
     private final TestResultPrinterService testResultPrinterService;
     private final MessageSourceImp messageSource;
     private final AppConfig appConfig;
 
     public StudentTestServiceImp(
             QuestionPrinterService questionPrinterService, IOServiceImp ioServiceImp, QuestionService questionService,
-            CollectNameService collectNameService,
+            CollectNameServiceImp collectNameServiceImp,
             TestResultPrinterService testResultPrinterService, MessageSourceImp messageSource, AppConfig appConfig) {
         this.questionPrinterService = questionPrinterService;
         this.ioServiceImp = ioServiceImp;
         this.questionService = questionService;
-        this.collectNameService = collectNameService;
+        this.collectNameServiceImp = collectNameServiceImp;
         this.testResultPrinterService = testResultPrinterService;
         this.messageSource = messageSource;
         this.appConfig = appConfig;
@@ -52,7 +57,7 @@ public class StudentTestServiceImp implements StudentTestService, CommandLineRun
         ioServiceImp.printItem(messageSource.getMessage("student.test.greeting.message", DEFAULT_STUDENT_TEST_GREETING_MESSAGE));
 
         //get user full name
-        String name = collectNameService.collectName();
+        String name = collectNameServiceImp.collectName();
 
         //get questions for test
         List<Question> questions = questionService.getQuestions();
@@ -113,8 +118,7 @@ public class StudentTestServiceImp implements StudentTestService, CommandLineRun
         return answers;
     }
 
-    @Override
-    public void run(String... args) {
-        startTestingSession();
-    }
+//    public void run(String... args) {
+//        startTestingSession();
+//    }
 }
