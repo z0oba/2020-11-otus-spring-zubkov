@@ -10,7 +10,7 @@ import java.util.List;
  * Service for working with user IO
  */
 @Service
-public class IOServiceImp implements IOService<String, String> {
+public class IOServiceImp implements IOService {
 
     private static final String BORDER_MESSAGE = "++++++++++++++++++++++++++++++++++++++++";
 
