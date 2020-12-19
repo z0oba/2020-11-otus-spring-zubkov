@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface QuestionDao {
     Question findByNumber(int number);
+
     List<Question> findAll();
 }

@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- *  Class for Question from *.csv file
+ * Class for Question from *.csv file
  */
 @Getter
 @Setter

@@ -1,11 +1,10 @@
 package ru.otus.homework.printer;
 
 import org.springframework.stereotype.Service;
-import ru.otus.homework.configs.MessageSourceImp;
 import ru.otus.homework.domain.Question;
-import ru.otus.homework.io.IOServiceImp;
+import ru.otus.homework.io.IOService;
 import ru.otus.homework.io.printer.PrinterService;
-import ru.otus.homework.utils.NumberedStringFormatter;
+import ru.otus.homework.localization.MessageSourceService;
 
 import java.util.List;
 
@@ -17,46 +16,48 @@ public class QuestionPrinterService implements PrinterService<Question> {
     private static final String DEFAULT_EMPTY_ANSWER = "Your answer";
     private static final String DEFAULT_PRINT_ALL_QUESTIONS_HEADLINE = "All questions with answers : ";
 
-    private final IOServiceImp ioServiceImp;
-    private final NumberedStringFormatter formatter;
-    private final MessageSourceImp messageSource;
+    private final IOService ioService;
+    private final MessageSourceService messageSourceService;
 
-    public QuestionPrinterService(IOServiceImp ioServiceImp, NumberedStringFormatter formatter, MessageSourceImp messageSource) {
-        this.ioServiceImp = ioServiceImp;
-        this.formatter = formatter;
-        this.messageSource = messageSource;
+    public QuestionPrinterService(IOService ioService, MessageSourceService messageSourceService) {
+        this.ioService = ioService;
+        this.messageSourceService = messageSourceService;
     }
 
     @Override
     public void printAll(List<Question> questions) {
-        ioServiceImp.printBorder();
-        ioServiceImp.printItem(messageSource.getMessage("all.questions.headline", DEFAULT_PRINT_ALL_QUESTIONS_HEADLINE));
-        ioServiceImp.printBorder();
+        ioService.printBorder();
+        ioService.printItem(messageSourceService.getMessage("all.questions.headline", DEFAULT_PRINT_ALL_QUESTIONS_HEADLINE));
+        ioService.printBorder();
         for (Question question : questions) {
             printItem(question);
         }
-        ioServiceImp.printBorder();
+        ioService.printBorder();
     }
 
     @Override
-    public void printItem(Question question){
-        ioServiceImp.printItem(
-                messageSource.getMessage("question.prefix", DEFAULT_QUESTION_PREFIX) + question.getQuestion()
+    public void printItem(Question question) {
+        ioService.printItem(
+                messageSourceService.getMessage("question.prefix", DEFAULT_QUESTION_PREFIX) + question.getQuestion()
         );
-        ioServiceImp.printItem(
-                messageSource.getMessage("answers.prefix", DEFAULT_ANSWERS_PREFIX)
+        ioService.printItem(
+                messageSourceService.getMessage("answers.prefix", DEFAULT_ANSWERS_PREFIX)
         );
 
         if (question.getAnswers() != null && !question.getAnswers().isEmpty()) {
             int counter = 0;
             for (String answer : question.getAnswers()) {
-                if(answer ==  null || answer.trim().isEmpty() )
-                    answer = messageSource.getMessage("empty.answer", DEFAULT_EMPTY_ANSWER);
-                ioServiceImp.printItem(formatter.toNumberedString(counter, answer));
+                if (answer == null || answer.trim().isEmpty())
+                    answer = messageSourceService.getMessage("empty.answer", DEFAULT_EMPTY_ANSWER);
+
+                ioService.printItem(
+                        messageSourceService.getMessage("numbered.answer",
+                                new String[]{String.valueOf(counter), answer.trim()})
+                );
                 ++counter;
             }
         } else {
-            ioServiceImp.printItem(DEFAULT_EMPTY_ANSWER);
+            ioService.printItem(DEFAULT_EMPTY_ANSWER);
         }
     }
 }

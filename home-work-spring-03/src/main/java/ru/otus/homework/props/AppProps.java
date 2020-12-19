@@ -1,4 +1,4 @@
-package ru.otus.homework.configs;
+package ru.otus.homework.props;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,12 +9,9 @@ import java.util.Locale;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "application")
-public class AppConfig {
-
+public class AppProps {
     private Locale locale;
     private String delimiter;
     private String file;
     private int errorLimit;
-
-    private String stringFormatterDelimiter;
 }
