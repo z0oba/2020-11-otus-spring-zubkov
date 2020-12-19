@@ -40,7 +40,9 @@ public class IOServiceFacadeImp implements IOServiceFacade {
 
     @Override
     public void printAll(List<?> items) {
-        getActualPrinterService(items.getClass().getComponentType()).printAll(items);
+        if(items == null || items.isEmpty())
+            throw new IOServiceFacadeException("Empty list error");
+        getActualPrinterService(items.get(0).getClass()).printAll(items); 
     }
 
     @Override
