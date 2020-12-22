@@ -2,9 +2,7 @@ package ru.otus.homework.service;
 
 import org.springframework.stereotype.Service;
 import ru.otus.homework.io.IOService;
-import ru.otus.homework.io.IOServiceImp;
 import ru.otus.homework.localization.MessageSourceService;
-import ru.otus.homework.localization.MessageSourceServiceImp;
 
 @Service
 public class CollectNameServiceImp implements CollectNameService {
@@ -13,8 +11,8 @@ public class CollectNameServiceImp implements CollectNameService {
     private final IOService ioServiceImp;
     private final MessageSourceService messageSource;
 
-    public CollectNameServiceImp(IOServiceImp ioServiceImp, MessageSourceServiceImp messageSource) {
-        this.ioServiceImp = ioServiceImp;
+    public CollectNameServiceImp(IOService ioService, MessageSourceService messageSource) {
+        this.ioServiceImp = ioService;
         this.messageSource = messageSource;
     }
 

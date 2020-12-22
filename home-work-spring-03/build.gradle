@@ -24,7 +24,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-//	implementation 'junit:junit:4.12'
+    implementation 'org.springframework.boot:spring-boot-autoconfigure'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
@@ -32,8 +32,6 @@ dependencies {
     }
 
     testCompile 'org.junit.jupiter:junit-jupiter:5.4.2'
-//	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.4.2'
-//	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '3.6.28'
     testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.6.28'
     testCompileOnly 'org.projectlombok:lombok:1.18.16'

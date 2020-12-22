@@ -1,18 +1,14 @@
 package ru.otus.homework;
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.otus.homework.service.StudentTestService;
 
 
 /**
  * For staring student tests
  */
-@Service
-@ConditionalOnProperty(
-        value = "test.enabled", havingValue = "false", matchIfMissing = true
-)
+@Component
 public class StudentTestRunner implements CommandLineRunner {
 
     private final StudentTestService studentTestService;

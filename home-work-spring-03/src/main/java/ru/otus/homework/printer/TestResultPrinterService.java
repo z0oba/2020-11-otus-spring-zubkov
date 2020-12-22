@@ -2,11 +2,11 @@ package ru.otus.homework.printer;
 
 import org.springframework.stereotype.Service;
 import ru.otus.homework.domain.TestResult;
+import ru.otus.homework.domain.UserAnswer;
 import ru.otus.homework.io.IOService;
 import ru.otus.homework.io.printer.PrinterService;
 import ru.otus.homework.localization.MessageSourceService;
 
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -48,19 +48,15 @@ public class TestResultPrinterService implements PrinterService<TestResult> {
         ioService.printBorder();
         ioService.printItem(messageSourceService.getMessage("results.message", DEFAULT_RESULTS_MESSAGE));
         ioService.printBorder();
-        Iterator<String> answersIterator = testResult.getAnswers().iterator();
-        Iterator<Boolean> resultsIterator = testResult.getResults().iterator();
+
 
         int counter = 0;
-        while (answersIterator.hasNext() && resultsIterator.hasNext()) {
-            String answer = answersIterator.next();
-            Boolean result = resultsIterator.next();
+        for (UserAnswer userAnswer : testResult.getUserAnswers()) {
             ioService.printItem(
                     messageSourceService.getMessage("answer.and.result.delimiter",
                             new String[]{
                                     String.valueOf(counter),
-                                    String.valueOf(result),
-                                    answer},
+                                    userAnswer.getAnswer() + ":" + userAnswer.getResult()},
                             DEFAULT_ANSWER_AND_RESULT_DELIMITER)
             );
             ++counter;

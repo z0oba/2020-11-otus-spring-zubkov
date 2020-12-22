@@ -2,13 +2,9 @@ package ru.otus.homework;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.homework.dao.QuestionDao;
 import ru.otus.homework.domain.Question;
 import ru.otus.homework.exceptions.QuestionDaoException;
@@ -20,11 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 
-@ExtendWith(MockitoExtension.class)
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
-@TestPropertySource(properties = "test.enabled=true")
 public class QuestionServiceImpTests {
+    @MockBean
+    private StudentTestRunner studentTestRunner;
 
     @MockBean
     private QuestionDao questionDao;
@@ -62,9 +57,9 @@ public class QuestionServiceImpTests {
         int number = -100;
         String exceptionMessage = "Can`t find question with number ";
 
-        given(questionDao.findByNumber(-100)).willThrow(new QuestionDaoException(exceptionMessage + number));
+        given(questionDao.findByNumber(number)).willThrow(new QuestionDaoException(exceptionMessage + number));
 
-        Exception exception = assertThrows(QuestionDaoException.class, () -> questionService.getByNumber(-100));
+        Exception exception = assertThrows(QuestionDaoException.class, () -> questionService.getByNumber(number));
         Assertions.assertEquals(exceptionMessage + number, exception.getMessage());
     }
 }

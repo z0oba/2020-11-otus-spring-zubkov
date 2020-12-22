@@ -34,22 +34,25 @@ public class IOServiceFacadeImp implements IOServiceFacade {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void printItem(Object item) {
         getActualPrinterService(item.getClass()).printItem(item);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void printAll(List<?> items) {
-        if(items == null || items.isEmpty())
+        if (items == null || items.isEmpty())
             throw new IOServiceFacadeException("Empty list error");
-        getActualPrinterService(items.get(0).getClass()).printAll(items); 
+        getActualPrinterService(items.get(0).getClass()).printAll(items);
     }
 
     @Override
     public String readItem() {
-        return (String) ioService.readItem();
+        return ioService.readItem();
     }
 
+    @SuppressWarnings("rawtypes")
     private PrinterService getActualPrinterService(Class<?> itemClass) {
         if (itemClass.equals(Student.class))
             return studentPrinterService;
@@ -62,5 +65,4 @@ public class IOServiceFacadeImp implements IOServiceFacade {
         else
             throw new IOServiceFacadeException("Unknown class type");
     }
-
 }

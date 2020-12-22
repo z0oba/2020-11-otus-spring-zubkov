@@ -9,18 +9,13 @@ import java.util.List;
 @Getter
 public class TestResult {
     private final Student student;
-    private final List<Question> questions;
-    private final List<String> answers;
-    private final List<Boolean> results;
+    private final List<UserAnswer> userAnswers;
     private final boolean isPassed;
     private final int errorLimit;
 
-    public TestResult(Student student, List<Question> questions, List<String> answers, List<Boolean> results,
-                      boolean isPassed, int errorLimit) {
+    public TestResult(Student student, List<UserAnswer> userAnswers, boolean isPassed, int errorLimit) {
         this.student = student;
-        this.questions = questions;
-        this.answers = answers;
-        this.results = results;
+        this.userAnswers = userAnswers;
         this.isPassed = isPassed;
         this.errorLimit = errorLimit;
     }

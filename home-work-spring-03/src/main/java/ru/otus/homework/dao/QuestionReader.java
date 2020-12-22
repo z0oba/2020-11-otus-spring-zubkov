@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import ru.otus.homework.domain.Question;
 import ru.otus.homework.exceptions.QuestionReaderException;
 import ru.otus.homework.localization.MessageSourceService;
-import ru.otus.homework.localization.MessageSourceServiceImp;
 import ru.otus.homework.props.AppProps;
 
 import java.io.BufferedReader;
@@ -20,7 +19,7 @@ public class QuestionReader {
     private final MessageSourceService messageSourceService;
     private final AppProps appProps;
 
-    public QuestionReader(MessageSourceServiceImp messageSourceService, AppProps appProps) {
+    public QuestionReader(MessageSourceService messageSourceService, AppProps appProps) {
         this.messageSourceService = messageSourceService;
         this.appProps = appProps;
     }

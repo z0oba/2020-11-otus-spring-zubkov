@@ -1,15 +1,14 @@
 package ru.otus.homework.service;
 
 import ru.otus.homework.domain.Question;
+import ru.otus.homework.domain.UserAnswer;
 
 import java.util.List;
 
 public interface StudentTestService {
     void startTestingSession();
 
-    boolean checkErrorLimit(int errorLimit, List<Boolean> results);
+    boolean checkErrorLimit(int errorLimit, List<UserAnswer> userAnswers);
 
-    List<Boolean> checkTestAnswers(List<Question> questions, List<String> answers);
-
-    List<String> collectTestAnswers(List<Question> questions);
+    List<UserAnswer> collectTestAnswers(List<Question> questions);
 }

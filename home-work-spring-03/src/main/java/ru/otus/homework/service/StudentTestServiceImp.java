@@ -4,13 +4,11 @@ import org.springframework.stereotype.Service;
 import ru.otus.homework.domain.Question;
 import ru.otus.homework.domain.Student;
 import ru.otus.homework.domain.TestResult;
+import ru.otus.homework.domain.UserAnswer;
 import ru.otus.homework.localization.MessageSourceService;
-import ru.otus.homework.localization.MessageSourceServiceImp;
-import ru.otus.homework.printer.TestResultPrinterService;
 import ru.otus.homework.props.AppProps;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -30,9 +28,8 @@ public class StudentTestServiceImp implements StudentTestService {
     public StudentTestServiceImp(
             IOServiceFacade IOServiceFacade,
             QuestionService questionService,
-            CollectNameServiceImp collectNameService,
-            TestResultPrinterService testResultPrinterService,
-            MessageSourceServiceImp messageSource,
+            CollectNameService collectNameService,
+            MessageSourceService messageSource,
             AppProps appProps) {
 
         this.IOServiceFacade = IOServiceFacade;
@@ -55,26 +52,23 @@ public class StudentTestServiceImp implements StudentTestService {
         //get questions for test
         List<Question> questions = questionService.getQuestions();
 
-        //get user answers
-        List<String> answers = collectTestAnswers(questions);
-
-        //get checked test answers results
-        List<Boolean> results = checkTestAnswers(questions, answers);
+        //get and check user answers for correct
+        List<UserAnswer> userAnswers = collectTestAnswers(questions);
 
         //check for error limit
-        boolean isPassed = !checkErrorLimit(appProps.getErrorLimit(), results);
+        boolean isPassed = !checkErrorLimit(appProps.getErrorLimit(), userAnswers);
 
         //print test result for student
         IOServiceFacade.printItem(
-                new TestResult(new Student(name), questions, answers, results, isPassed, appProps.getErrorLimit())
+                new TestResult(new Student(name), userAnswers, isPassed, appProps.getErrorLimit())
         );
     }
 
     @Override
-    public boolean checkErrorLimit(int errorLimit, List<Boolean> results) {
+    public boolean checkErrorLimit(int errorLimit, List<UserAnswer> userAnswers) {
         int counter = 0;
-        for (Boolean result : results) {
-            if (!result)
+        for (UserAnswer userAnswer : userAnswers) {
+            if (!userAnswer.getResult())
                 ++counter;
             if (counter > errorLimit)
                 return true;
@@ -82,32 +76,22 @@ public class StudentTestServiceImp implements StudentTestService {
         return false;
     }
 
-    @Override
-    public List<Boolean> checkTestAnswers(List<Question> questions, List<String> answers) {
-        List<Boolean> results = new ArrayList<>();
-
-        Iterator<Question> questionsIterator = questions.iterator();
-        Iterator<String> answersIterator = answers.iterator();
-
-        while (questionsIterator.hasNext() && answersIterator.hasNext()) {
-            results.add(
-                    questionsIterator.next().getCorrectAnswer().trim().toLowerCase().equals(
-                            answersIterator.next().trim().toLowerCase()
-                    )
-            );
-        }
-        return results;
+    private boolean checkTestAnswer(Question question, String answer) {
+        return question.getCorrectAnswer().trim().toLowerCase().equals(
+                answer.trim().toLowerCase()
+        );
     }
 
     @Override
-    public List<String> collectTestAnswers(List<Question> questions) {
-        List<String> answers = new ArrayList<>();
+    public List<UserAnswer> collectTestAnswers(List<Question> questions) {
+        List<UserAnswer> userAnswers = new ArrayList<>();
         for (Question question : questions) {
             IOServiceFacade.printBorder();
             IOServiceFacade.printItem(question);
-            answers.add(IOServiceFacade.readItem());
+            String answer = IOServiceFacade.readItem();
+            userAnswers.add(new UserAnswer(question, answer, checkTestAnswer(question, answer)));
             IOServiceFacade.printBorder();
         }
-        return answers;
+        return userAnswers;
     }
 }

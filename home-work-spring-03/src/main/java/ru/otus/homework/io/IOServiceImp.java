@@ -1,8 +1,8 @@
 package ru.otus.homework.io;
 
 import org.springframework.stereotype.Service;
-import ru.otus.homework.io.printer.PrinterServiceImp;
-import ru.otus.homework.io.reader.ReaderServiceImp;
+import ru.otus.homework.io.printer.PrinterService;
+import ru.otus.homework.io.reader.ReaderService;
 
 import java.util.List;
 
@@ -14,12 +14,12 @@ public class IOServiceImp implements IOService {
 
     private static final String BORDER_MESSAGE = "++++++++++++++++++++++++++++++++++++++++";
 
-    private final PrinterServiceImp printerService;
-    private final ReaderServiceImp readerService;
+    private final PrinterService<String> printerService;
+    private final ReaderService<String> readerService;
 
-    public IOServiceImp(PrinterServiceImp printerService, ReaderServiceImp readerServiceImp) {
+    public IOServiceImp(PrinterService<String> printerService, ReaderService<String> readerService) {
         this.printerService = printerService;
-        this.readerService = readerServiceImp;
+        this.readerService = readerService;
     }
 
     @Override
