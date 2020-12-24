@@ -7,5 +7,5 @@ application:
   locale: ru_RU
   delimiter: ":"
   file: test-questions.csv
-  errorLimit: 1000
+  errorLimit: 4
 

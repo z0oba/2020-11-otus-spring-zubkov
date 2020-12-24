@@ -10,4 +10,6 @@ public interface IOServiceFacade {
     void printAll(List<?> items);
 
     String readItem();
+
+    void printItem(String message, String defaultValue);
 }

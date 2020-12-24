@@ -5,7 +5,6 @@ import ru.otus.homework.domain.Question;
 import ru.otus.homework.domain.Student;
 import ru.otus.homework.domain.TestResult;
 import ru.otus.homework.domain.UserAnswer;
-import ru.otus.homework.localization.MessageSourceService;
 import ru.otus.homework.props.AppProps;
 
 import java.util.ArrayList;
@@ -19,23 +18,20 @@ public class StudentTestServiceImp implements StudentTestService {
 
     private final static String DEFAULT_STUDENT_TEST_GREETING_MESSAGE = "Welcome for student testing program!";
 
-    private final IOServiceFacade IOServiceFacade; //read and print different objects
+    private final IOServiceFacade ioServiceFacade; //read and print different objects
     private final QuestionService questionService;
     private final CollectNameService collectNameService;
     private final AppProps appProps;
-    private final MessageSourceService messageSource;
 
     public StudentTestServiceImp(
-            IOServiceFacade IOServiceFacade,
+            IOServiceFacade ioServiceFacade,
             QuestionService questionService,
             CollectNameService collectNameService,
-            MessageSourceService messageSource,
             AppProps appProps) {
 
-        this.IOServiceFacade = IOServiceFacade;
+        this.ioServiceFacade = ioServiceFacade;
         this.questionService = questionService;
         this.collectNameService = collectNameService;
-        this.messageSource = messageSource;
         this.appProps = appProps;
     }
 
@@ -43,8 +39,8 @@ public class StudentTestServiceImp implements StudentTestService {
     public void startTestingSession() {
 
         //print test greetings
-        IOServiceFacade.printBorder();
-        IOServiceFacade.printItem(messageSource.getMessage("student.test.greeting.message", DEFAULT_STUDENT_TEST_GREETING_MESSAGE));
+        ioServiceFacade.printBorder();
+        ioServiceFacade.printItem("student.test.greeting.message", DEFAULT_STUDENT_TEST_GREETING_MESSAGE);
 
         //get user full name
         String name = collectNameService.collectName();
@@ -59,13 +55,12 @@ public class StudentTestServiceImp implements StudentTestService {
         boolean isPassed = !checkErrorLimit(appProps.getErrorLimit(), userAnswers);
 
         //print test result for student
-        IOServiceFacade.printItem(
+        ioServiceFacade.printItem(
                 new TestResult(new Student(name), userAnswers, isPassed, appProps.getErrorLimit())
         );
     }
 
-    @Override
-    public boolean checkErrorLimit(int errorLimit, List<UserAnswer> userAnswers) {
+    private boolean checkErrorLimit(int errorLimit, List<UserAnswer> userAnswers) {
         int counter = 0;
         for (UserAnswer userAnswer : userAnswers) {
             if (!userAnswer.getResult())
@@ -82,15 +77,15 @@ public class StudentTestServiceImp implements StudentTestService {
         );
     }
 
-    @Override
-    public List<UserAnswer> collectTestAnswers(List<Question> questions) {
+
+    private List<UserAnswer> collectTestAnswers(List<Question> questions) {
         List<UserAnswer> userAnswers = new ArrayList<>();
         for (Question question : questions) {
-            IOServiceFacade.printBorder();
-            IOServiceFacade.printItem(question);
-            String answer = IOServiceFacade.readItem();
+            ioServiceFacade.printBorder();
+            ioServiceFacade.printItem(question);
+            String answer = ioServiceFacade.readItem();
             userAnswers.add(new UserAnswer(question, answer, checkTestAnswer(question, answer)));
-            IOServiceFacade.printBorder();
+            ioServiceFacade.printBorder();
         }
         return userAnswers;
     }

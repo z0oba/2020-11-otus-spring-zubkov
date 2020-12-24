@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import ru.otus.homework.domain.Student;
 import ru.otus.homework.io.IOService;
 import ru.otus.homework.io.printer.PrinterService;
-import ru.otus.homework.localization.MessageSourceService;
 
 import java.util.List;
 
@@ -14,11 +13,9 @@ public class StudentPrinterService implements PrinterService<Student> {
     private static final String DEFAULT_FOR_STUDENT_MESSAGE = "For student : ";
 
     private final IOService ioService;
-    private final MessageSourceService messageSourceService;
 
-    public StudentPrinterService(IOService ioService, MessageSourceService messageSourceService) {
+    public StudentPrinterService(IOService ioService) {
         this.ioService = ioService;
-        this.messageSourceService = messageSourceService;
     }
 
     @Override
@@ -31,8 +28,6 @@ public class StudentPrinterService implements PrinterService<Student> {
     @Override
     public void printItem(Student student) {
         ioService.printBorder();
-        ioService.printItem(
-                messageSourceService.getMessage("for.student.message", DEFAULT_FOR_STUDENT_MESSAGE) + student.getFullName()
-        );
+        ioService.printItem("for.student.message", DEFAULT_FOR_STUDENT_MESSAGE, student.getFullName());
     }
 }

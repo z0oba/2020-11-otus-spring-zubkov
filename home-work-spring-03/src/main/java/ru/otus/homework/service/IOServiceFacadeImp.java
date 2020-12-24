@@ -52,6 +52,12 @@ public class IOServiceFacadeImp implements IOServiceFacade {
         return ioService.readItem();
     }
 
+    //print strings with localization
+    @Override
+    public void printItem(String message, String defaultValue) {
+        ioService.printItem(message, defaultValue);
+    }
+
     @SuppressWarnings("rawtypes")
     private PrinterService getActualPrinterService(Class<?> itemClass) {
         if (itemClass.equals(Student.class))
