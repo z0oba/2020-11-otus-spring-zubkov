@@ -15,8 +15,6 @@ import java.util.List;
 @Service
 public class QuestionReader {
 
-    private static final String DEFAULT_FILE_SUFFIX = ".csv";
-
     private final AppProps appProps;
 
     public QuestionReader(AppProps appProps) {
@@ -29,9 +27,7 @@ public class QuestionReader {
         ClassLoader classLoader = QuestionReader.class.getClassLoader();
 
         //get localized or default csv file
-        String csvFile = appProps.getLocale() != null ?
-                appProps.getFile().replace(DEFAULT_FILE_SUFFIX, "_" + appProps.getLocale() + DEFAULT_FILE_SUFFIX) :
-                appProps.getFile();
+        String csvFile = appProps.getFile();
 
         try (InputStream inputStream = classLoader.getResourceAsStream(csvFile);
              InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
