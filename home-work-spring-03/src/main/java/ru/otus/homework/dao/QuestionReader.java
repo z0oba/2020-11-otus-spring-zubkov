@@ -1,9 +1,9 @@
 package ru.otus.homework.dao;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.otus.homework.domain.Question;
 import ru.otus.homework.exceptions.QuestionReaderException;
+import ru.otus.homework.props.AppProps;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -15,12 +15,12 @@ import java.util.List;
 @Service
 public class QuestionReader {
 
-    private final String delimiter;
-    private final String questionFile;
+    private static final String DEFAULT_FILE_SUFFIX = ".csv";
 
-    public QuestionReader( @Value("${csv.delimiter}")String delimiter, @Value("${csv.file}")String questionFile) {
-        this.delimiter = delimiter;
-        this.questionFile = questionFile;
+    private final AppProps appProps;
+
+    public QuestionReader(AppProps appProps) {
+        this.appProps = appProps;
     }
 
     public List<Question> readQuestions() throws QuestionReaderException {
@@ -28,13 +28,18 @@ public class QuestionReader {
         List<Question> questions = new ArrayList<>();
         ClassLoader classLoader = QuestionReader.class.getClassLoader();
 
-        try (InputStream inputStream = classLoader.getResourceAsStream(questionFile);
+        //get localized or default csv file
+        String csvFile = appProps.getLocale() != null ?
+                appProps.getFile().replace(DEFAULT_FILE_SUFFIX, "_" + appProps.getLocale() + DEFAULT_FILE_SUFFIX) :
+                appProps.getFile();
+
+        try (InputStream inputStream = classLoader.getResourceAsStream(csvFile);
              InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
              BufferedReader reader = new BufferedReader(streamReader)) {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                List<String> strings = List.of(line.split(delimiter));
+                List<String> strings = List.of(line.split(appProps.getDelimiter()));
                 if (strings.size() < 3)
                     throw new QuestionReaderException("Incorrect csv line, need more than " + strings.size() + "elements");
                 questions.add(

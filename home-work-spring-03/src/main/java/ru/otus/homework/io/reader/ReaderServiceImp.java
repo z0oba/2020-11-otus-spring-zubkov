@@ -10,7 +10,7 @@ public class ReaderServiceImp implements ReaderService<String> {
     private final Scanner scanner = new Scanner(System.in);
 
     @Override
-    public String readItem(){
+    public String readItem() {
         return scanner.nextLine();
     }
 }
