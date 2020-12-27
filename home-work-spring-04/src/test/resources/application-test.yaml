@@ -1,0 +1,15 @@
+spring:
+  messages:
+    basename: bundle
+    defaultEncoding: UTF-8
+  shell:
+    interactive:
+      enabled: false
+
+application:
+  locale: ru_RU
+  delimiter: ":"
+  file: test-questions.csv
+  errorLimit: 4
+
+
