@@ -5,7 +5,7 @@ import ru.otus.homework.domain.Question;
 import java.util.List;
 
 public interface QuestionService {
-    //for working with dao
+    //for working with ru.otus.homework.dao
     Question getByNumber(int number);
     List<Question> getQuestions();
 

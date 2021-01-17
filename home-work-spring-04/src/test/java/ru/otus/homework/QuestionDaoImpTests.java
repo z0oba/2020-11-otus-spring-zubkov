@@ -20,7 +20,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
-@DisplayName("Tests question dao imp")
+@DisplayName("Tests question ru.otus.homework.dao imp")
 @ActiveProfiles(profiles = "test")
 @SpringBootTest
 public class QuestionDaoImpTests {
