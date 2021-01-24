@@ -8,7 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
+import ru.otus.homework.dao.AuthorDao;
 import ru.otus.homework.dao.BookDaoJdbc;
+import ru.otus.homework.dao.GenreDao;
 import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Genre;
@@ -28,6 +30,13 @@ public class BookServiceImplTest {
     private static final long TEST_BOOK_ID = 5;
     @MockBean
     private BookDaoJdbc bookDaoJdbc;
+
+    @MockBean
+    private AuthorDao authorDaoJdbc;
+
+    @MockBean
+    private GenreDao genreDaoJdbc;
+
     @Autowired
     private BookService bookService;
 
@@ -73,9 +82,7 @@ public class BookServiceImplTest {
         Assertions.assertThat(bookService.count()).isEqualTo(EXPECTED_BOOKS_COUNT - 1);
 
         given(bookDaoJdbc.getById(TEST_BOOK_ID)).willThrow(new EmptyResultDataAccessException("Incorrect result size: expected 1, actual 0", 1));
-        Assertions.assertThatThrownBy(() -> {
-            bookService.getById(TEST_BOOK_ID);
-        }).isInstanceOf(EmptyResultDataAccessException.class)
+        Assertions.assertThatThrownBy(() -> bookService.getById(TEST_BOOK_ID)).isInstanceOf(EmptyResultDataAccessException.class)
                 .hasMessageContaining("Incorrect result size: expected 1, actual 0");
     }
 }

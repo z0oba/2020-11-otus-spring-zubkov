@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.otus.homework.dao.BookDao;
 import ru.otus.homework.dao.BookDaoJdbc;
@@ -39,13 +40,20 @@ public class BookDaoJdbcTest {
         Assertions.assertThat(bookDaoJdbc.count()).isEqualTo(EXPECTED_BOOKS_COUNT);
     }
 
-    @DisplayName("Insert new book into DB")
+    @DisplayName("Insert new book into DB, author and genre presents at db")
     @Test
     void insertBook() {
-        Book book = new Book(TEST_BOOK_ID, TEST_BOOK_NAME, new Author("Orwell"), new Genre("Novel"));
+        Book book = new Book(TEST_BOOK_ID, TEST_BOOK_NAME, new Author(1, "Dovlatov"), new Genre(3, "Novel"));
         bookDaoJdbc.insert(book);
         Book actualBook = bookDaoJdbc.getById(TEST_BOOK_ID);
         Assertions.assertThat(actualBook).isEqualTo(book);
+    }
+
+    @DisplayName("Insert new book into DB, author and genre not presents at db")
+    @Test
+    void insertBookWithNewAuthorAndGenre() {
+        Book book = new Book(TEST_BOOK_ID, TEST_BOOK_NAME, new Author(4, "Orwell"), new Genre(4, "Novel"));
+        Assertions.assertThatThrownBy(() -> bookDaoJdbc.insert(book)).isInstanceOf(DataIntegrityViolationException.class);
     }
 
     @DisplayName("Get book by Id")
@@ -74,9 +82,7 @@ public class BookDaoJdbcTest {
         bookDaoJdbc.deleteById(DELETE_BOOK_ID);
         Assertions.assertThat(count).isEqualTo(bookDaoJdbc.count() + 1);
 
-        Assertions.assertThatThrownBy(() -> {
-            bookDaoJdbc.getById(DELETE_BOOK_ID);
-        }).isInstanceOf(EmptyResultDataAccessException.class)
+        Assertions.assertThatThrownBy(() -> bookDaoJdbc.getById(DELETE_BOOK_ID)).isInstanceOf(EmptyResultDataAccessException.class)
                 .hasMessageContaining("Incorrect result size: expected 1, actual 0");
     }
 
@@ -84,9 +90,7 @@ public class BookDaoJdbcTest {
     @DisplayName("Get book by incorrect Id")
     @Test
     void getBookByIncorrectId() {
-        Assertions.assertThatThrownBy(() -> {
-            bookDaoJdbc.getById(BOOK_INCORRECT_ID);
-        }).isInstanceOf(EmptyResultDataAccessException.class)
+        Assertions.assertThatThrownBy(() -> bookDaoJdbc.getById(BOOK_INCORRECT_ID)).isInstanceOf(EmptyResultDataAccessException.class)
                 .hasMessageContaining("Incorrect result size: expected 1, actual 0");
     }
 
