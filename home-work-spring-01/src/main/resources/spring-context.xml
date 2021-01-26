@@ -4,12 +4,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="questionDao" class="ru.otus.homework.dao.QuestionDaoImp">
+    <bean id="questionDao" class="ru.otus.homework.ru.otus.homework.dao.QuestionDaoImp">
         <constructor-arg name="questionReader" ref="questionReader"/>
     </bean>
 
     <bean id="questionService" class="ru.otus.homework.service.QuestionServiceImp">
-        <constructor-arg name="dao" ref="questionDao"/>
+        <constructor-arg name="ru.otus.homework.dao" ref="questionDao"/>
         <constructor-arg name="printer" ref="questionPrinter"/>
 
     </bean>
