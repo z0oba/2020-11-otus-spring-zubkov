@@ -34,10 +34,6 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public long insert(Book book) {
-
-        book.getAuthor().setId(insert(book.getAuthor()));
-        book.getGenre().setId(insert(book.getGenre()));
-
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("name", book.getName());
         params.addValue("genre_id", book.getGenre().getId());
@@ -47,35 +43,8 @@ public class BookDaoJdbc implements BookDao {
         return keyHolder.getKey().longValue();
     }
 
-    private long insert(Author author) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("author_name", author.getName());
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        //check author for exist at db
-        if (jdbcOperations.queryForObject("select count(*) from authors where name=:author_name", params, Long.class) > 0) {
-            return jdbcOperations.queryForObject("select id from authors where name=:author_name", params, Long.class);
-        } else {
-            jdbcOperations.update("insert into authors (name) values(:author_name)", params, keyHolder);
-            return keyHolder.getKey().longValue();
-        }
-    }
-
-    private long insert(Genre genre) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("genre_name", genre.getName());
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        //check genre for exist at db
-        if (jdbcOperations.queryForObject("select count(*) from genres where name=:genre_name", params, Long.class) > 0) {
-            return jdbcOperations.queryForObject("select id from genres where name=:genre_name", params, Long.class);
-        } else {
-            jdbcOperations.update("insert into genres (name) values(:genre_name)", params, keyHolder);
-            return keyHolder.getKey().longValue();
-        }
-    }
-
     @Override
     public Book getById(long id) {
-
         Map<String, Object> params = new HashMap<>(1);
         params.put("id", id);
         return jdbcOperations.queryForObject(
@@ -111,14 +80,6 @@ public class BookDaoJdbc implements BookDao {
             Author author = new Author(resultSet.getLong("author_id"), resultSet.getString("authorName"));
             Genre genre = new Genre(resultSet.getLong("genre_id"), resultSet.getString("genreName"));
             return new Book(id, name, author, genre);
-        }
-    }
-
-    private static class IdMapper implements RowMapper<Long> {
-
-        @Override
-        public Long mapRow(ResultSet resultSet, int i) throws SQLException {
-            return resultSet.getLong("id");
         }
     }
 }
