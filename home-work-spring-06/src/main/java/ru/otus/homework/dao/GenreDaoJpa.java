@@ -20,7 +20,12 @@ public class GenreDaoJpa implements GenreDao {
 
     @Override
     public Genre save(Genre genre) {
-        return null;
+        if (genre.getId() <= 0) {
+            em.persist(genre);
+            return genre;
+        } else {
+            return em.merge(genre);
+        }
     }
 
     @Override

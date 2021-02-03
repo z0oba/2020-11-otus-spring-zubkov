@@ -1,4 +1,4 @@
-package ru.otus.homework;
+package ru.otus.homework.service;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -7,15 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
-import ru.otus.homework.dao.AuthorDaoJpa;
-import ru.otus.homework.dao.BookDaoJpa;
-import ru.otus.homework.dao.CommentDaoJpa;
-import ru.otus.homework.dao.GenreDaoJpa;
+import ru.otus.homework.dao.AuthorDao;
+import ru.otus.homework.dao.BookDao;
+import ru.otus.homework.dao.CommentDao;
+import ru.otus.homework.dao.GenreDao;
 import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Comment;
 import ru.otus.homework.domain.Genre;
-import ru.otus.homework.service.CommentService;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,16 +49,16 @@ public class CommentsServiceImplTest {
     );
 
     @MockBean
-    private AuthorDaoJpa authorDaoJpa;
+    private AuthorDao authorDao;
 
     @MockBean
-    private GenreDaoJpa genreDaoJpa;
+    private GenreDao genreDao;
 
     @MockBean
-    private CommentDaoJpa commentDaoJpa;
+    private CommentDao commentDao;
 
     @MockBean
-    private BookDaoJpa bookDaoJpa;
+    private BookDao bookDao;
 
     @Autowired
     private CommentService commentService;
@@ -67,21 +66,21 @@ public class CommentsServiceImplTest {
     @DisplayName("Get comments count by commentservice")
     @Test
     void commentCount() {
-        given(commentDaoJpa.count()).willReturn(EXPECTED_COMMENT_COUNT);
-        Assertions.assertThat(commentDaoJpa.count()).isEqualTo(EXPECTED_COMMENT_COUNT);
+        given(commentDao.count()).willReturn(EXPECTED_COMMENT_COUNT);
+        Assertions.assertThat(commentDao.count()).isEqualTo(EXPECTED_COMMENT_COUNT);
     }
 
     @DisplayName("Get comment by id with commentService")
     @Test
     void getCommentById() {
-        given(commentDaoJpa.findById(TEST_COMMENT_FROM_DB.getId())).willReturn(Optional.of(TEST_COMMENT_FROM_DB));
+        given(commentDao.findById(TEST_COMMENT_FROM_DB.getId())).willReturn(Optional.of(TEST_COMMENT_FROM_DB));
         Assertions.assertThat(commentService.getById(TEST_COMMENT_FROM_DB.getId())).isEqualTo(TEST_COMMENT_FROM_DB);
     }
 
     @DisplayName("Get all comments by id with commentService")
     @Test
     void getAllComments() {
-        given(commentDaoJpa.findAll()).willReturn(TEST_COMMENT_LIST_FROM_DB);
+        given(commentDao.findAll()).willReturn(TEST_COMMENT_LIST_FROM_DB);
         Assertions.assertThat(commentService.getAll()).isEqualTo(TEST_COMMENT_LIST_FROM_DB);
     }
 
@@ -89,8 +88,8 @@ public class CommentsServiceImplTest {
     @Test
     void insertComment() {
 
-        given(bookDaoJpa.findById(TEST_BOOK_FROM_DB.getId())).willReturn(Optional.of(TEST_BOOK_FROM_DB));
-        given(commentDaoJpa.save(any(Comment.class))).willReturn(NEW_TEST_COMMENT);
+        given(bookDao.findById(TEST_BOOK_FROM_DB.getId())).willReturn(Optional.of(TEST_BOOK_FROM_DB));
+        given(commentDao.save(any(Comment.class))).willReturn(NEW_TEST_COMMENT);
 
         Assertions.assertThat(commentService.insert(
                 NEW_TEST_COMMENT.getBook().getId(),
@@ -102,8 +101,8 @@ public class CommentsServiceImplTest {
     @Test
     void deleteBookById() {
         commentService.deleteById(TEST_COMMENT_FROM_DB.getId());
-        given(commentDaoJpa.count()).willReturn(EXPECTED_COMMENT_COUNT - 1);
+        given(commentDao.count()).willReturn(EXPECTED_COMMENT_COUNT - 1);
         Assertions.assertThat(commentService.count()).isEqualTo(EXPECTED_COMMENT_COUNT - 1);
-        given(commentDaoJpa.findById(TEST_COMMENT_FROM_DB.getId())).willReturn(null);
+        given(commentDao.findById(TEST_COMMENT_FROM_DB.getId())).willReturn(null);
     }
 }

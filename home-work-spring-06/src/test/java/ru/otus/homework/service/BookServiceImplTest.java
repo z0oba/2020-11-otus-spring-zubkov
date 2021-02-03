@@ -1,4 +1,4 @@
-package ru.otus.homework;
+package ru.otus.homework.service;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -7,14 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
-import ru.otus.homework.dao.AuthorDaoJpa;
-import ru.otus.homework.dao.BookDaoJpa;
-import ru.otus.homework.dao.CommentDaoJpa;
-import ru.otus.homework.dao.GenreDaoJpa;
+import ru.otus.homework.dao.AuthorDao;
+import ru.otus.homework.dao.BookDao;
+import ru.otus.homework.dao.CommentDao;
+import ru.otus.homework.dao.GenreDao;
 import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Genre;
-import ru.otus.homework.service.BookServiceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,38 +43,38 @@ public class BookServiceImplTest {
     );
 
     @MockBean
-    private AuthorDaoJpa authorDaoJpa;
+    private AuthorDao authorDao;
 
     @MockBean
-    private GenreDaoJpa genreDaoJpa;
+    private GenreDao genreDao;
 
     @MockBean
-    private CommentDaoJpa commentDaoJpa;
+    private CommentDao commentDao;
 
     @MockBean
-    private BookDaoJpa bookDaoJpa;
+    private BookDao bookDao;
 
     @Autowired
-    private BookServiceImpl bookService;
+    private BookService bookService;
 
     @DisplayName("Get book count by bookservice")
     @Test
     void bookCount() {
-        given(bookDaoJpa.count()).willReturn(EXPECTED_BOOKS_COUNT);
+        given(bookDao.count()).willReturn(EXPECTED_BOOKS_COUNT);
         Assertions.assertThat(bookService.count()).isEqualTo(EXPECTED_BOOKS_COUNT);
     }
 
     @DisplayName("Get book by id with bookservice")
     @Test
     void getBookById() {
-        given(bookDaoJpa.findById(TEST_BOOK_ID)).willReturn(Optional.of(TEST_BOOK_FROM_DB));
+        given(bookDao.findById(TEST_BOOK_ID)).willReturn(Optional.of(TEST_BOOK_FROM_DB));
         Assertions.assertThat(bookService.getById(TEST_BOOK_ID)).isEqualTo(TEST_BOOK_FROM_DB);
     }
 
     @DisplayName("Get all books by id with bookservice")
     @Test
     void getAllBook() {
-        given(bookDaoJpa.findAll()).willReturn(TEST_BOOK_LIST_FROM_DB);
+        given(bookDao.findAll()).willReturn(TEST_BOOK_LIST_FROM_DB);
         Assertions.assertThat(bookService.getAll()).isEqualTo(TEST_BOOK_LIST_FROM_DB);
     }
 
@@ -83,12 +82,12 @@ public class BookServiceImplTest {
     @Test
     void insertBook() {
 
-        given(authorDaoJpa.findByName(NEW_TEST_BOOK.getAuthor().getName()))
+        given(authorDao.findByName(NEW_TEST_BOOK.getAuthor().getName()))
                 .willReturn(NEW_TEST_BOOK.getAuthor());
-        given(genreDaoJpa.findByName(NEW_TEST_BOOK.getGenre().getName()))
+        given(genreDao.findByName(NEW_TEST_BOOK.getGenre().getName()))
                 .willReturn(NEW_TEST_BOOK.getGenre());
 
-        given(bookDaoJpa.save(any(Book.class))).willReturn(NEW_TEST_BOOK);
+        given(bookDao.save(any(Book.class))).willReturn(NEW_TEST_BOOK);
 
         Assertions.assertThat(bookService.insert(
                 NEW_TEST_BOOK.getName(),
@@ -101,8 +100,8 @@ public class BookServiceImplTest {
     @Test
     void deleteBookById() {
         bookService.deleteById(TEST_BOOK_ID);
-        given(bookDaoJpa.count()).willReturn(EXPECTED_BOOKS_COUNT - 1);
+        given(bookDao.count()).willReturn(EXPECTED_BOOKS_COUNT - 1);
         Assertions.assertThat(bookService.count()).isEqualTo(EXPECTED_BOOKS_COUNT - 1);
-        given(bookDaoJpa.findById(TEST_BOOK_ID)).willReturn(null);
+        given(bookDao.findById(TEST_BOOK_ID)).willReturn(null);
     }
 }

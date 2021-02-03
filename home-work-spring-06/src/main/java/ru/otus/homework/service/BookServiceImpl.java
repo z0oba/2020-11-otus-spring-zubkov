@@ -1,67 +1,65 @@
 package ru.otus.homework.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.homework.dao.AuthorDao;
 import ru.otus.homework.dao.BookDao;
 import ru.otus.homework.dao.GenreDao;
 import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Genre;
+import ru.otus.homework.exceptions.BookServiceException;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+@AllArgsConstructor
 public class BookServiceImpl implements BookService {
 
-    @Autowired
-    private final BookDao bookDaoJpa;
-
-    @Autowired
-    private final AuthorDao authorDaoJpa;
-
-    @Autowired
-    private final GenreDao genreDaoJpa;
-
-    public BookServiceImpl(BookDao bookDaoJpa, AuthorDao authorDaoJpa, GenreDao genreDaoJpa) {
-        this.bookDaoJpa = bookDaoJpa;
-        this.authorDaoJpa = authorDaoJpa;
-        this.genreDaoJpa = genreDaoJpa;
-    }
+    private final BookDao bookDao;
+    private final AuthorDao authorDao;
+    private final GenreDao genreDao;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Book> getAll() {
-        return bookDaoJpa.findAll();
+        return bookDao.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Book getById(long id) {
-        return bookDaoJpa.findById(id).orElseThrow();
+        return bookDao.findById(id).orElseThrow(
+                () -> {
+                    throw new BookServiceException("Can`t find book by id");
+                });
     }
 
     @Override
+    @Transactional(readOnly = true)
     public long count() {
-        return bookDaoJpa.count();
+        return bookDao.count();
     }
 
     @Override
+    @Transactional
     public long insert(String name, String authorName, String genreName) {
-        Author author = authorDaoJpa.findByName(authorName);
+        Author author = authorDao.findByName(authorName);
         if (author == null)
-            author = authorDaoJpa.save(new Author(authorName));
+            author = authorDao.save(new Author(authorName));
 
-        Genre genre = genreDaoJpa.findByName(genreName);
+        Genre genre = genreDao.findByName(genreName);
         if (genre == null)
-            genre = genreDaoJpa.save(new Genre(genreName));
+            genre = genreDao.save(new Genre(genreName));
 
-        Book book = bookDaoJpa.save(new Book(name, author, genre));
+        Book book = bookDao.save(new Book(name, author, genre));
         return book.getId();
     }
 
     @Override
+    @Transactional
     public void deleteById(long id) {
-        bookDaoJpa.deleteById(id);
+        bookDao.deleteById(id);
     }
 }

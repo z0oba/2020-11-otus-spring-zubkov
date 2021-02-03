@@ -18,7 +18,7 @@ public class Comment {
     @Column(name = "text", unique = true)
     private String text;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
 

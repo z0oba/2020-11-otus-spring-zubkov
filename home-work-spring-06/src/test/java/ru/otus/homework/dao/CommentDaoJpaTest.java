@@ -1,4 +1,4 @@
-package ru.otus.homework;
+package ru.otus.homework.dao;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -7,10 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.annotation.DirtiesContext;
-import ru.otus.homework.dao.BookDaoJpa;
-import ru.otus.homework.dao.CommentDao;
-import ru.otus.homework.dao.CommentDaoJpa;
 import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Comment;
@@ -20,7 +16,6 @@ import java.util.List;
 
 @DisplayName("Tests of comment dao jpa")
 @DataJpaTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Import(CommentDaoJpa.class)
 public class CommentDaoJpaTest {
 
