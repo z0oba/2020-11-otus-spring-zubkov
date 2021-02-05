@@ -23,8 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @DisplayName("Tests of comment service")
-@ActiveProfiles(profiles = "service-test")
-@SpringBootTest
+@SpringBootTest(classes = CommentServiceImp.class)
 public class CommentsServiceImplTest {
 
     private static final long EXPECTED_COMMENT_COUNT = 3;

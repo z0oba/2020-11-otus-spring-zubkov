@@ -1,20 +1,16 @@
 package ru.otus.homework.shell;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.otus.homework.service.BookService;
 
+@AllArgsConstructor
 @ShellComponent
 public class BooksCommands {
 
-    @Autowired
     private final BookService bookService;
-
-    public BooksCommands(BookService bookService) {
-        this.bookService = bookService;
-    }
 
     @ShellMethod(value = "Get all books from DB", key = {"get-all-books", "gab"})
     public void getAllBooks() {

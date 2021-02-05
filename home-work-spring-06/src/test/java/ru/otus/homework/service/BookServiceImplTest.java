@@ -22,8 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @DisplayName("Tests of  book service")
-@ActiveProfiles(profiles = "service-test")
-@SpringBootTest
+@SpringBootTest(classes = BookServiceImpl.class)
 public class BookServiceImplTest {
 
     private static final long EXPECTED_BOOKS_COUNT = 3;
