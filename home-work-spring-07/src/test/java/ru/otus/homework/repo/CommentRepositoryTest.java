@@ -1,4 +1,4 @@
-package ru.otus.homework.dao;
+package ru.otus.homework.repo;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
