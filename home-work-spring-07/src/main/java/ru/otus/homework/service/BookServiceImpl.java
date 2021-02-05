@@ -2,6 +2,7 @@ package ru.otus.homework.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Genre;
@@ -9,12 +10,10 @@ import ru.otus.homework.repo.AuthorRepository;
 import ru.otus.homework.repo.BookRepository;
 import ru.otus.homework.repo.GenreRepository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @AllArgsConstructor
 @Service
-@Transactional
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
@@ -22,21 +21,25 @@ public class BookServiceImpl implements BookService {
     private final GenreRepository genreRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Book> getAll() {
         return bookRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Book getById(long id) {
         return bookRepository.findById(id).orElseThrow();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public long count() {
         return bookRepository.count();
     }
 
     @Override
+    @Transactional
     public long insert(String name, String authorName, String genreName) {
         Author author = authorRepository.findByName(authorName);
         if (author == null)
@@ -51,6 +54,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public void deleteById(long id) {
         bookRepository.deleteById(id);
     }
