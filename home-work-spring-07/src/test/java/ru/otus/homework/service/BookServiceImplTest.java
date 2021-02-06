@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Genre;
@@ -22,8 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @DisplayName("Tests of  book service")
-@ActiveProfiles(profiles = "service-test")
-@SpringBootTest
+@SpringBootTest(classes = BookServiceImpl.class)
 public class BookServiceImplTest {
 
     private static final long EXPECTED_BOOKS_COUNT = 3;

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Comment;
@@ -23,8 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @DisplayName("Tests of comment service")
-@ActiveProfiles(profiles = "service-test")
-@SpringBootTest
+@SpringBootTest(classes = CommentServiceImp.class)
 public class CommentsServiceImplTest {
 
     private static final long EXPECTED_COMMENT_COUNT = 3;

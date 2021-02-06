@@ -7,5 +7,5 @@ import ru.otus.homework.domain.Author;
 
 public interface AuthorRepository extends JpaRepository<Author, Long> {
     @Query("select a from Author a where a.name = :name")
-    Author findByName(@Param("name")String name);
+    Author findByName(@Param("name") String name);
 }

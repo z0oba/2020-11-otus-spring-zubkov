@@ -1,19 +1,16 @@
 package ru.otus.homework.shell;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.otus.homework.service.CommentService;
 
+@AllArgsConstructor
 @ShellComponent
 public class CommentsCommands {
-    @Autowired
-    private final CommentService commentService;
 
-    public CommentsCommands(CommentService commentService) {
-        this.commentService = commentService;
-    }
+    private final CommentService commentService;
 
     @ShellMethod(value = "Get all comments from DB", key = {"get-all-comments", "gac"})
     public void getAllComments() {
