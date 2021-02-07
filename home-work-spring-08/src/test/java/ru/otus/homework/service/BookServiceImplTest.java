@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
+import ru.otus.homework.domain.Comment;
 import ru.otus.homework.domain.Genre;
 import ru.otus.homework.repo.AuthorRepository;
 import ru.otus.homework.repo.BookRepository;
@@ -22,25 +23,38 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @DisplayName("Tests of  book service")
-@ActiveProfiles(profiles = "service-test")
 @SpringBootTest
 public class BookServiceImplTest {
 
+    private static final List<Author> authors = List.of(
+            new Author(0L, "Dovlatov"),
+            new Author(1L, "Lermontov"),
+            new Author(2L, "Bulgakov")
+    );
+
+    private static final List<Genre> genres = List.of(
+            new Genre(0L, "Story"),
+            new Genre(1L, "Poems"),
+            new Genre(2L, "Novel")
+    );
+
+    private static final List<Comment> comments = List.of(
+            new Comment(0L, "It`s ok!"),
+            new Comment(1L, "Not bad"),
+            new Comment(2L, "Awesome")
+    );
+
+    private static final List<Book> books = List.of(
+            new Book(0L, "Conservancy area", authors.get(0), genres.get(0), comments.subList(0, 1)),
+            new Book(1L, "Mtsyri", authors.get(1), genres.get(1), comments.subList(1, 2)),
+            new Book(2L, "Master and Margarita", authors.get(2), genres.get(2), comments.subList(0, 2))
+    );
+
     private static final long EXPECTED_BOOKS_COUNT = 3;
     private static final long TEST_BOOK_ID = 5;
-
-    private static final Book TEST_BOOK_FROM_DB = new Book(1L, "Conservancy area",
-            new Author(1L, "Dovlatov"), new Genre(1L, "Story"));
-
-
-    private static final Book NEW_TEST_BOOK = new Book(TEST_BOOK_ID, "1984",
-            new Author(4L, "Dovlatov N"), new Genre(4L, "Fantastic Story"));
-
-    private static final List<Book> TEST_BOOK_LIST_FROM_DB = List.of(
-            new Book(1L, "Conservancy area", new Author(1L, "Dovlatov"), new Genre(1L, "Story")),
-            new Book(2L, "Mtsyri", new Author(2L, "Lermontov"), new Genre(2L, "Poems")),
-            new Book(3L, "Master and Margarita", new Author(3L, "Bulgakov"), new Genre(3L, "Novel"))
-    );
+    private static final Book TEST_BOOK_FROM_DB = books.get(0);
+    private static final Book NEW_TEST_BOOK = new Book(TEST_BOOK_ID, "1984", authors.get(0), genres.get(0), comments);
+    private static final List<Book> TEST_BOOK_LIST_FROM_DB = books;
 
     @MockBean
     private AuthorRepository authorRepository;

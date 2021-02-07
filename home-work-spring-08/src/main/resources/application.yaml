@@ -1,25 +1,13 @@
-#spring:
-#  datasource:
-#    url: jdbc:h2:mem:testdb
-#    schema: schema.sql
-#    data: data.sql
-#    initialization-mode: always
-#  jpa:
-#    generate-ddl: false
-#    hibernate:
-#      ddl-auto: none
-#    show-sql: true
-#  shell:
-#    interactive:
-#      enabled: true
-
 spring:
   data:
     mongodb:
-      database: company
-
+      port: 0
+      database: testdb
+  shell:
+    interactive:
+      enabled: true
 mongock:
-  runner-type: "ApplicationRunner" # default
-  #runner-type: "InitializingBean"
-#  change-logs-scan-package:
-#    - ru.otus.spring.mongock.changelog
+  enabled: true
+  #  runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package: ru.otus.homework.mongock.changelog

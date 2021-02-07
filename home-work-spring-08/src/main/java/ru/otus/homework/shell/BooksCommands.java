@@ -1,6 +1,5 @@
 package ru.otus.homework.shell;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -9,7 +8,6 @@ import ru.otus.homework.service.BookService;
 @ShellComponent
 public class BooksCommands {
 
-    @Autowired
     private final BookService bookService;
 
     public BooksCommands(BookService bookService) {
