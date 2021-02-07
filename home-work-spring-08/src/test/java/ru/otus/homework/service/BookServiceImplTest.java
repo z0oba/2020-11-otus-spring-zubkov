@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Comment;
@@ -23,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @DisplayName("Tests of  book service")
-@SpringBootTest
+@SpringBootTest(classes = BookServiceImpl.class)
 public class BookServiceImplTest {
 
     private static final List<Author> authors = List.of(
@@ -67,6 +66,9 @@ public class BookServiceImplTest {
 
     @MockBean
     private BookRepository bookRepository;
+
+    @MockBean
+    private SequenceGeneratorService sequenceGeneratorService;
 
     @Autowired
     private BookService bookService;
@@ -113,9 +115,10 @@ public class BookServiceImplTest {
     @DisplayName("Delete book by id with bookservice")
     @Test
     void deleteBookById() {
-        bookService.deleteById(TEST_BOOK_ID);
+        given(bookRepository.findById(any())).willReturn(Optional.ofNullable(TEST_BOOK_FROM_DB));
+        bookService.deleteById(TEST_BOOK_FROM_DB.getId());
         given(bookRepository.count()).willReturn(EXPECTED_BOOKS_COUNT - 1);
         Assertions.assertThat(bookService.count()).isEqualTo(EXPECTED_BOOKS_COUNT - 1);
-        given(bookRepository.findById(TEST_BOOK_ID)).willReturn(null);
+        given(bookRepository.findById(TEST_BOOK_FROM_DB.getId())).willReturn(null);
     }
 }

@@ -13,7 +13,7 @@ import ru.otus.homework.domain.Genre;
 
 import java.util.List;
 
-@DisplayName("Tests of comment dao jpa")
+@DisplayName("Tests of comment dao")
 @DataMongoTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CommentRepositoryTest {

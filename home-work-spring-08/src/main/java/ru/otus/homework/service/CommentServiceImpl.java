@@ -15,7 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 @Transactional
-public class CommentServiceImp implements CommentService {
+public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final BookRepository bookRepository;
@@ -50,10 +50,9 @@ public class CommentServiceImp implements CommentService {
     public long insert(long bookId, String text) {
         Optional<Book> book = bookRepository.findById(bookId);
         if (book.isPresent()) {
-            //ToDo: проверка на наличие комментария с таким же текстом в репе
             Comment comment = new Comment(sequenceGeneratorService.generateSequence(Comment.SEQUENCE_NAME), text);
-            if(book.get().getComments() == null)
-               book.get().setComments(new ArrayList<>());
+            if (book.get().getComments() == null)
+                book.get().setComments(new ArrayList<>());
             book.get().getComments().add(comment);
             bookRepository.save(book.get());
             return commentRepository.save(comment).getId();

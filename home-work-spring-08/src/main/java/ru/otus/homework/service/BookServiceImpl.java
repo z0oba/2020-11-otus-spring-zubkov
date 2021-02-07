@@ -62,17 +62,19 @@ public class BookServiceImpl implements BookService {
     public void deleteById(long id) {
         Book book = bookRepository.findById(id).get();
         //remove authors if they are not present in other books
-        if(bookRepository.findBooksByAuthor(book.getAuthor()).size() == 1)
+        if (bookRepository.findBooksByAuthor(book.getAuthor()).size() == 1)
             authorRepository.deleteById(book.getAuthor().getId());
 
         //remove genres if they are not present in other books
-        if(bookRepository.findBooksByGenre(book.getGenre()).size() == 1)
+        if (bookRepository.findBooksByGenre(book.getGenre()).size() == 1)
             genreRepository.deleteById(book.getGenre().getId());
 
         //remove comments of books, comments text is not equals
-        for(Comment comment: book.getComments()) {
+        if(book.getComments() != null) {
+            for (Comment comment : book.getComments()) {
 //            if(bookRepository.findBooksByComment(comment).size() == 1)
                 commentRepository.deleteById(comment.getId());
+            }
         }
         bookRepository.deleteById(id);
     }

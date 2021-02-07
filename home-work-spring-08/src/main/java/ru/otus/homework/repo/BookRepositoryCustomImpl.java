@@ -14,7 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class BookRepositoryCustomImpl implements BookRepositoryCustom<Book, Long>{
+public class BookRepositoryCustomImpl implements BookRepositoryCustom<Book, Long> {
 
     private final MongoTemplate mongoTemplate;
 

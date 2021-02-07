@@ -14,7 +14,7 @@ import ru.otus.homework.domain.Genre;
 
 import java.util.List;
 
-@DisplayName("Tests of book dao jpa")
+@DisplayName("Tests of book dao")
 @DataMongoTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class BookRepositoryTest {

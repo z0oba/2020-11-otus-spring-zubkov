@@ -29,8 +29,7 @@ dependencies {
     implementation group: 'com.github.cloudyrock.mongock', name: 'mongodb-springdata-v3-driver', version: '4.1.17'
     implementation group: 'com.github.cloudyrock.mongock', name: 'mongock-spring-v5', version: '4.1.17'
 
-    compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
-
+    implementation group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
 //    implementation group: 'org.mongodb', name: 'mongo-java-driver', version: '3.12.7'
 
     compileOnly 'org.projectlombok:lombok'

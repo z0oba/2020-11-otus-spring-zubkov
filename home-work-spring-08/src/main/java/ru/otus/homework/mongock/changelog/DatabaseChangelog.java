@@ -4,7 +4,6 @@ import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
 import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.decorator.impl.MongockTemplate;
 import com.mongodb.client.MongoDatabase;
-import org.springframework.stereotype.Component;
 import ru.otus.homework.domain.*;
 import ru.otus.homework.repo.AuthorRepository;
 import ru.otus.homework.repo.BookRepository;
@@ -13,7 +12,6 @@ import ru.otus.homework.repo.GenreRepository;
 
 import java.util.List;
 
-@Component
 @ChangeLog(order = "001")
 public class DatabaseChangelog {
 
@@ -46,27 +44,27 @@ public class DatabaseChangelog {
         db.drop();
     }
 
-    @ChangeSet(order = "002", id = "initAuthorsRepo", author = "zubkovia")
+    @ChangeSet(order = "002", id = "initAuthorsRepo", author = "zubkovia", runAlways = true)
     public void initAuthorRepo(AuthorRepository authorRepository) {
         authorRepository.saveAll(authors);
     }
 
-    @ChangeSet(order = "003", id = "initGenresRepo", author = "zubkovia")
+    @ChangeSet(order = "003", id = "initGenresRepo", author = "zubkovia", runAlways = true)
     public void initGenresRepo(GenreRepository genreRepository) {
         genreRepository.saveAll(genres);
     }
 
-    @ChangeSet(order = "004", id = "initCommentRepo", author = "zubkovia")
+    @ChangeSet(order = "004", id = "initCommentRepo", author = "zubkovia", runAlways = true)
     public void initCommentRepo(CommentRepository commentRepository) {
         commentRepository.saveAll(comments);
     }
 
-    @ChangeSet(order = "005", id = "initBookRepo", author = "zubkovia")
+    @ChangeSet(order = "005", id = "initBookRepo", author = "zubkovia", runAlways = true)
     public void initBookRepo(BookRepository bookRepository) {
         bookRepository.saveAll(books);
     }
 
-    @ChangeSet(order = "006", id = "initSequenceData", author = "zubkovia")
+    @ChangeSet(order = "006", id = "initSequenceData", author = "zubkovia", runAlways = true)
     public void initBookRepo(MongockTemplate mongoTemplate) {
         mongoTemplate.save(new DatabaseSequence("authors_sequence", authors.size() - 1));
         mongoTemplate.save(new DatabaseSequence("genres_sequence", genres.size() - 1));

@@ -6,8 +6,10 @@ import ru.otus.homework.domain.Genre;
 
 import java.util.List;
 
-public interface BookRepositoryCustom<Book, Long>{
+public interface BookRepositoryCustom<Book, Long> {
     List<Book> findBooksByAuthor(Author author);
+
     List<Book> findBooksByGenre(Genre genre);
+
     List<Book> findBooksByComment(Comment comment);
 }

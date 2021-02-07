@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Comment;
@@ -24,7 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @DisplayName("Tests of comment service")
-@SpringBootTest
+@SpringBootTest(classes = CommentServiceImpl.class)
 public class CommentsServiceImplTest {
 
     private static final List<Author> authors = List.of(
@@ -75,6 +74,10 @@ public class CommentsServiceImplTest {
 
     @Autowired
     private CommentService commentService;
+
+    @MockBean
+    private SequenceGeneratorService sequenceGeneratorService;
+
 
     @DisplayName("Get comments count by commentservice")
     @Test
