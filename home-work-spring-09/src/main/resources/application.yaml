@@ -9,6 +9,3 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
-  shell:
-    interactive:
-      enabled: false
