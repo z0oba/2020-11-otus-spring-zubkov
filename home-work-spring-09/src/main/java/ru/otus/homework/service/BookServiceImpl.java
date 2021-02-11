@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Genre;
+import ru.otus.homework.exceptions.BookServiceException;
 import ru.otus.homework.repo.AuthorRepository;
 import ru.otus.homework.repo.BookRepository;
 import ru.otus.homework.repo.GenreRepository;
@@ -29,7 +30,9 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(readOnly = true)
     public Book getById(long id) {
-        return bookRepository.findById(id).orElseThrow();
+        return bookRepository.findById(id).orElseThrow(() -> {
+            throw new BookServiceException("Can`t find book by id");
+        });
     }
 
     @Override
@@ -50,6 +53,24 @@ public class BookServiceImpl implements BookService {
             genre = genreRepository.save(new Genre(genreName));
 
         Book book = bookRepository.save(new Book(name, author, genre));
+        return book.getId();
+    }
+
+    @Override
+    @Transactional
+    public long insert(Book book) {
+        Author author = authorRepository.findByName(book.getAuthor().getName());
+        if (author == null)
+            author = authorRepository.save(new Author(book.getAuthor().getName()));
+
+        Genre genre = genreRepository.findByName(book.getGenre().getName());
+        if (genre == null)
+            genre = genreRepository.save(new Genre(book.getGenre().getName()));
+
+        book.setAuthor(author);
+        book.setGenre(genre);
+
+        bookRepository.save(book);
         return book.getId();
     }
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Comment;
+import ru.otus.homework.exceptions.CommentServiceException;
 import ru.otus.homework.repo.BookRepository;
 import ru.otus.homework.repo.CommentRepository;
 
@@ -33,7 +34,9 @@ public class CommentServiceImp implements CommentService {
     @Override
     @Transactional(readOnly = true)
     public Comment getById(long id) {
-        return commentRepository.findById(id).orElseThrow();
+        return commentRepository.findById(id).orElseThrow(() -> {
+            throw new CommentServiceException("Can`t find comment by id " + id);
+        });
     }
 
     @Override
@@ -49,12 +52,18 @@ public class CommentServiceImp implements CommentService {
         if (book.isPresent()) {
             return commentRepository.save(new Comment(text, book.get())).getId();
         } else
-            throw new RuntimeException("Can`t find book with id " + bookId);
+            throw new CommentServiceException("Can`t find book with id " + bookId);
     }
 
     @Override
     @Transactional
     public void deleteById(long id) {
         commentRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public long insert(Comment comment) {
+        return commentRepository.save(comment).getId();
     }
 }

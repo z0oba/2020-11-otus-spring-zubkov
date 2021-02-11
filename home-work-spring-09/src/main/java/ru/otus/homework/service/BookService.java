@@ -13,5 +13,7 @@ public interface BookService {
 
     long insert(String name, String author, String genre);
 
+    long insert(Book book);
+
     void deleteById(long id);
 }

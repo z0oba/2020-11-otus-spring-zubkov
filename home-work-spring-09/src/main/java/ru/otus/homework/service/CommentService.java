@@ -16,4 +16,7 @@ public interface CommentService {
     long insert(long bookId, String text);
 
     void deleteById(long id);
+
+    long insert(Comment comment);
+
 }
