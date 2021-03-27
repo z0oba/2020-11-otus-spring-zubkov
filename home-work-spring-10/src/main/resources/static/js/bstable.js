@@ -308,6 +308,5 @@ class BSTable {
     });
     return tableValues;
   }
-
 }
 

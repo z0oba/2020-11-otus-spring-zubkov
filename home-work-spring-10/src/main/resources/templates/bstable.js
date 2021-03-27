@@ -47,7 +47,7 @@ class BSTable {
       }
     };
 
-    this.table = $('#' + tableId);
+        this.table = $('#' + tableId);
     this.options = $.extend(true, defaults, options);
 
     /** @private */ this.actionsColumnHTML = '<td name="bstable-actions">' + this.options.advanced.buttonHTML + '</td>'; 
@@ -73,7 +73,7 @@ class BSTable {
     this.table.find('thead tr').append('<th name="bstable-actions">' + this.options.advanced.columnLabel + '</th>');  // Append column to header
     this.table.find('tbody tr').append(this.actionsColumnHTML);
 
-    this._addOnClickEventsToActions(); // Add onclick events to each action button in all rows
+    this._addOnClickEventsToActions(); // Add onclick events to each actio in all rows
 
     // Process "addButton" parameter
     if (this.options.$addButton != null) {
