@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.otus.homework.domain.Author;
-import ru.otus.homework.repo.AuthorRepository;
 
 @DisplayName("Tests of author repo")
 @DataJpaTest

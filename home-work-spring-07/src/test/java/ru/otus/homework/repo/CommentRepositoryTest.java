@@ -9,7 +9,6 @@ import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Comment;
 import ru.otus.homework.domain.Genre;
-import ru.otus.homework.repo.CommentRepository;
 
 import java.util.List;
 

@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.otus.homework.domain.Author;
 import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Genre;
-import ru.otus.homework.repo.BookRepository;
 
 import java.util.List;
 
