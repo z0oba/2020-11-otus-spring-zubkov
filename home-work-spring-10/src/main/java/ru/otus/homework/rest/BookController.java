@@ -27,7 +27,7 @@ public class BookController {
     }
 
     @PostMapping("/api/book/update")
-    void updateBook(@RequestBody BookDto bookDto) {
+    public void updateBook(@RequestBody BookDto bookDto) {
         bookService.updateById(
                     bookDto.getId(),
                     bookDto.getName(),
@@ -37,12 +37,12 @@ public class BookController {
     }
 
     @PostMapping("/api/book/delete")
-    void deleteBook(@RequestBody BookDto bookDto) {
+    public void deleteBook(@RequestBody BookDto bookDto) {
         bookService.deleteById(bookDto.getId());
     }
 
     @PostMapping("/api/book/add")
-    long addBook(@RequestBody BookDto bookDto) {
+    public long addBook(@RequestBody BookDto bookDto) {
         return bookService.add(
                 bookDto.getName(),
                 bookDto.getAuthor(),

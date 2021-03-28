@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 public class CommentController {
 
     private final CommentService commentService;
-    private final BookService bookService;
 
     @PostMapping("/api/book/comments")
     public List<CommentDto> getAllComments(@RequestBody CommentDto commentDto) {
@@ -31,17 +30,17 @@ public class CommentController {
     }
 
     @PostMapping("/api/book/comment/update")
-    void updateComment(@RequestBody CommentDto commentDto) {
+    public void updateComment(@RequestBody CommentDto commentDto) {
         commentService.updateById(commentDto.getId(), commentDto.getText());
     }
 
     @PostMapping("/api/book/comment/delete")
-    void deleteComment(@RequestBody CommentDto commentDto) {
+    public void deleteComment(@RequestBody CommentDto commentDto) {
         commentService.deleteById(commentDto.getId());
     }
 
     @PostMapping("/api/book/comment/add")
-    long addComment(@RequestBody CommentDto commentDto) {
+    public long addComment(@RequestBody CommentDto commentDto) {
         return commentService.add(commentDto.getBookId(), commentDto.getText());
     }
 }
