@@ -92,6 +92,7 @@ class BSTable {
   destroy() {
     this.table.find('th[name="bstable-actions"]').remove(); //remove header
     this.table.find('td[name="bstable-actions"]').remove(); //remove body rows
+    this.options.$addButton.prop("onclick", null).off("click");
   }
 
   /**
