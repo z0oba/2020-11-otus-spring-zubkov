@@ -11,7 +11,7 @@ public interface BookService {
 
     Book getById(long id);
 
-    long add(String name, String author, String genre);
+    Book add(String name, String author, String genre);
 
     long updateById(long id, String name, String author, String genre);
 

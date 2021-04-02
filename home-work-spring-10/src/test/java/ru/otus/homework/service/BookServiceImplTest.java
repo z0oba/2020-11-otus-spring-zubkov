@@ -91,7 +91,7 @@ public class BookServiceImplTest {
                 NEW_TEST_BOOK.getName(),
                 NEW_TEST_BOOK.getAuthor().getName(),
                 NEW_TEST_BOOK.getGenre().getName()))
-                .isEqualTo(NEW_TEST_BOOK.getId());
+                .isEqualTo(NEW_TEST_BOOK);
     }
 
     @DisplayName("Delete book by id with bookservice")

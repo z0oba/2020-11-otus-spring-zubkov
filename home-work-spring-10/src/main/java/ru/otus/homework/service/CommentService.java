@@ -13,7 +13,7 @@ public interface CommentService {
 
     List<Comment> getByBookId(long bookId);
 
-    long add(long bookId, String text);
+    Comment add(long bookId, String text);
 
     void deleteById(long id);
 
