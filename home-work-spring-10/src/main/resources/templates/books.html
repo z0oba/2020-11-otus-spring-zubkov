@@ -81,6 +81,18 @@ function showCommentsTable(bookId){
   getAllComments(bookId);
 }
 
+function updateRowId(row, id){
+    $(row).find('td').eq(0).text(id);
+}
+
+function removeEmptyRows(table){
+    $(table).find('tr').each(function() {
+        if($(this).find('td').eq(0).text().trim() === '' && $(this).index() != 0){ //empty row
+        	this.remove();
+        }
+    });
+}
+
 function getBooksTable(){
   return new BookBsTable("bookTable",{
         editableColumns:"1,2,3",
@@ -103,7 +115,7 @@ function getBooksTable(){
                   async: false,
                   contentType: 'application/json; charset=utf-8',
                   success: function(msg) {
-                    getAllBooks();
+                      removeEmptyRows($('#bookTable'));
                   }
               });
           }
@@ -115,22 +127,25 @@ function getBooksTable(){
                   dataType: 'json',
                   async: false,
                   contentType: 'application/json; charset=utf-8',
-                  success: function(msg) {
-                    getAllBooks();
+                  success: function(bookDto) {
+                        updateRowId(row, bookDto.id);
+                        removeEmptyRows($('#bookTable'));
                   }
               });
           }
         },
         onBeforeDelete: function(row) {
-           var bookDto = {
-               id: $(row).find('td').eq(0).text()
-           };
-           $.ajax({
-                url: "/books/" + (bookDto.id).toString(),
-                type: "DELETE",
-                success: function(msg) {
-                }
-           });},
+           var bookId = $(row).find('td').eq(0).text();
+           if(bookId >= 0){
+               $.ajax({
+                    url: "/books/" + (bookId).toString(),
+                    type: "DELETE",
+                    success: function(msg) {
+                    }
+               });
+           }
+        },
+
         advanced: {
           columnLabel: 'Actions',
           buttonHTML: `<div class="btn-group pull-right">
@@ -213,7 +228,10 @@ var lastBookId;
                     data: JSON.stringify(commentDto),
                     dataType: 'json',
                     async: false,
-                    contentType: 'application/json; charset=utf-8'
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(commentDto) {
+                        removeEmptyRows($('#commentTable'));
+                    }
                });
            }
            else{
@@ -223,26 +241,25 @@ var lastBookId;
                     data: JSON.stringify(commentDto),
                     dataType: 'json',
                     async: false,
-                    contentType: 'application/json; charset=utf-8'
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(commentDto) {
+                        updateRowId(row, commentDto.id);
+                        removeEmptyRows($('#commentTable'));
+                    }
                });
            }
 
-           getAllComments(lastBookId);
-
         },
         onBeforeDelete: function(row) {
-           <!-- json object -->
-           var commentDto = {
-               id: $(row).find('td').eq(0).text()
-           };
-
-           $.ajax({
-                url: '/comments/' + (commentDto.id).toString().trim(),
-                type: 'DELETE',
-                success: function(result) {
-                }
-           });
-
+           var commentId = $(row).find('td').eq(0).text()
+           if(commentId >= 0){
+               $.ajax({
+                    url: '/comments/' + (commentId).toString().trim(),
+                    type: 'DELETE',
+                    success: function(result) {
+                    }
+               });
+           }
         },
         advanced: {
           columnLabel: 'Actions',

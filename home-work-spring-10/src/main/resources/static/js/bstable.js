@@ -50,7 +50,7 @@ class BSTable {
     this.table = $('#' + tableId);
     this.options = $.extend(true, defaults, options);
 
-    /** @private */ this.actionsColumnHTML = '<td name="bstable-actions">' + this.options.advanced.buttonHTML + '</td>'; 
+    /** @private */ this.actionsColumnHTML = '<td name="bstable-actions">' + this.options.advanced.buttonHTML + '</td>';
 
     //Process "editableColumns" parameter. Sets the columns that will be editable
     if (this.options.editableColumns != null) {
@@ -212,10 +212,11 @@ class BSTable {
       let $cols = $currentRow.find('th');  // read each header field
       // create the new row
       let newColumnHTML = '';
+      let currentActionsColumnHTML = this.actionsColumnHTML;
       $cols.each(function() {
         let column = this; // Inner function this (column object)
         if ($(column).attr('name')=='bstable-actions') {
-          newColumnHTML = newColumnHTML + actionsColumnHTML;  // add action buttons
+          newColumnHTML = newColumnHTML + currentActionsColumnHTML;  // add action buttons
         } else {
           newColumnHTML = newColumnHTML + '<td></td>';
         }
