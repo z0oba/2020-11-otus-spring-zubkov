@@ -23,7 +23,7 @@ public class BookController {
     }
 
     @PutMapping("/books/{bookId}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     public void updateBook(@RequestBody BookDto bookDto, @PathVariable Long bookId) {
         bookService.updateById(
                 bookId,
@@ -34,7 +34,7 @@ public class BookController {
     }
 
     @DeleteMapping("/books/{bookId}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     public void deleteBook(@PathVariable Long bookId) {
         bookService.deleteById(bookId);
     }

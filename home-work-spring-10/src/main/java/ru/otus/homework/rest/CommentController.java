@@ -23,13 +23,13 @@ public class CommentController {
     }
 
     @PutMapping("/comments/{commentId}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     public void updateComment(@RequestBody CommentDto commentDto, @PathVariable Long commentId) {
         commentService.updateById(commentId, commentDto.getText());
     }
 
     @DeleteMapping("/comments/{commentId}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     public void deleteComment(@PathVariable Long commentId) {
         commentService.deleteById(commentId);
     }
