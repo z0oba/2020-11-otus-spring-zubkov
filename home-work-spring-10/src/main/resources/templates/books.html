@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Books main page</title>
+    <style type="text/css">
+            .popup_content {
+              margin: 10px;
+              padding: 0 10px;
+              max-width: 80%;
+              border: 2px solid #444;
+              background: white;
+              width: 100%;
+              height: 100%;
+            }
+
+    </style>
+    <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/webjars/jquery-ui/1.12.1/jquery-ui.js"></script>
+    <!--     main table class-->
+    <script src="/js/bstable.js"></script>
+    <!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/gh/vast-engineering/jquery-popup-overlay@2/jquery.popupoverlay.min.js"></script>
+    <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <!-- Bootstrap core CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/flatly/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" rel="stylesheet">
+</head>
+<body>
+
+<!--For working with books comments -->
+<section id="commentsPopup">
+    <div class="commentsListTable" id="commentsListTable" style="margin-top:20px;">
+        <h3 id=commentsTableTitle>Comments for book</h3>
+        <table class="table table-striped table-bordered" id="commentTable">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Text</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button class="btn btn-dark" id="new-comment-row-button">New Comment</button>
+    </div>
+</section>
+
+<div id="page">
+    <main class="container" role="main" style="margin-top:150px;">
+        <div class="booksListTable" id="booksListTable" style="margin-top:20px;">
+            <h3 id="booksTableTitle">Books:</h3>
+            <table class="table table-striped table-bordered" id="bookTable">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Genre</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <button class="btn btn-dark" id="new-row-button">New Book</button>
+        </div>
+    </main><!-- /.container -->
+
+
+    <script>
+
+function setCommentsTableTitle(titleText){
+  $('#commentsListTable').find('#commentsTableTitle').text(titleText);
+}
+
+function showCommentsTable(bookId){
+  $('#commentsPopup').popup('show');
+  setCommentsTableTitle("Comments for book with id " + String(bookId));
+  getAllComments(bookId);
+}
+
+function updateRowId(row, id){
+    $(row).find('td').eq(0).text(id);
+}
+
+function removeEmptyRows(table){
+    $(table).find('tr').each(function() {
+        if($(this).find('td').eq(0).text().trim() === '' && $(this).index() != 0){ //empty row
+        	this.remove();
+        }
+    });
+}
+
+function getBooksTable(){
+  return new BookBsTable("bookTable",{
+        editableColumns:"1,2,3",
+        $addButton: $('#new-row-button'),
+        onEdit: function(row) {
+
+           var bookDto = {
+               id: $(row).find('td').eq(0).text(),
+               name: $(row).find('td').eq(1).text(),
+               author: $(row).find('td').eq(2).text(),
+               genre: $(row).find('td').eq(3).text()
+           };
+
+           if(bookDto.id > 0){
+             $.ajax({
+                  url: "/books/" + (bookDto.id).toString(),
+                  type: "PUT",
+                  data: JSON.stringify(bookDto),
+                  dataType: 'json',
+                  async: false,
+                  contentType: 'application/json; charset=utf-8',
+                  success: function(msg) {
+                      removeEmptyRows($('#bookTable'));
+                  }
+              });
+          }
+          else{
+              $.ajax({
+                  url: "/books",
+                  type: "POST",
+                  data: JSON.stringify(bookDto),
+                  dataType: 'json',
+                  async: false,
+                  contentType: 'application/json; charset=utf-8',
+                  success: function(bookDto) {
+                        updateRowId(row, bookDto.id);
+                        removeEmptyRows($('#bookTable'));
+                  }
+              });
+          }
+        },
+        onBeforeDelete: function(row) {
+           var bookId = $(row).find('td').eq(0).text();
+           if(bookId >= 0){
+               $.ajax({
+                    url: "/books/" + (bookId).toString(),
+                    type: "DELETE",
+                    success: function(msg) {
+                    }
+               });
+           }
+        },
+
+        advanced: {
+          columnLabel: 'Actions',
+          buttonHTML: `<div class="btn-group pull-right">
+            <button id="bEdit" type="button" class="btn btn-sm btn-default">
+              <span class="fa fa-edit" > </span>
+            </button>
+            <button id="bDel" type="button" class="btn btn-sm btn-default">
+              <span class="fa fa-trash" > </span>
+            </button>
+            <button id="bCom" type="button" class="btn btn-sm btn-default">
+              <span class="fa fa-comment" > </span>
+            </button>
+            <button id="bAcep" type="button" class="btn btn-sm btn-default" style="display:none;">
+              <span class="fa fa-check-circle" > </span>
+            </button>
+            <button id="bCanc" type="button" class="btn btn-sm btn-default" style="display:none;">
+              <span class="fa fa-times-circle" > </span>
+            </button>
+          </div>`
+        }
+    });
+};
+
+
+class BookBsTable extends BSTable {
+  constructor(tableId, options){
+    super(tableId, options);}
+        showComments(id){
+            $('#commentsPopup').popup('show');
+            getAllComments(id);
+        }
+
+        _addOnClickEventsToActions(){
+            super._addOnClickEventsToActions();
+            this.table.find('tbody tr #bCom').each(function() {let button = this; button.onclick = function() {
+                let row = $(button).parents('tr');
+                showCommentsTable($(row).find('td').eq(0).text());
+        }});
+    }
+  }
+
+
+
+  function getAllBooks() {
+    $.get('/books').done(function (books) {
+        $('#bookTable tbody').empty();
+          books.forEach(function (book) {
+                $('#bookTable tbody').append(`
+                    <tr>
+                        <td>${book.id}</th>
+                        <td>${book.name}</td>
+                        <td>${book.author}</td>
+                        <td>${book.genre}</td>
+                    </tr>
+                `)
+            });
+          booksTable.refresh();
+      })
+  }
+
+<!--for save last book id-->
+var lastBookId;
+
+ function getCommentTable(){
+
+    return new BookBsTable("commentTable",{
+        editableColumns:"1",
+        $addButton: $('#new-comment-row-button'),
+        onEdit: function(row) {
+           var commentDto = {
+               id: $(row).find('td').eq(0).text(),
+               text: $(row).find('td').eq(1).text(),
+               bookId: lastBookId
+           };
+
+           if( commentDto.id > 0){
+               $.ajax({
+                    url: "/comments/" + (commentDto.id).toString(),
+                    type: "PUT",
+                    data: JSON.stringify(commentDto),
+                    dataType: 'json',
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(commentDto) {
+                        removeEmptyRows($('#commentTable'));
+                    }
+               });
+           }
+           else{
+               $.ajax({
+                    url: "/books/" + lastBookId.toString().trim() + "/comments",
+                    type: "POST",
+                    data: JSON.stringify(commentDto),
+                    dataType: 'json',
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(commentDto) {
+                        updateRowId(row, commentDto.id);
+                        removeEmptyRows($('#commentTable'));
+                    }
+               });
+           }
+
+        },
+        onBeforeDelete: function(row) {
+           var commentId = $(row).find('td').eq(0).text()
+           if(commentId >= 0){
+               $.ajax({
+                    url: '/comments/' + (commentId).toString().trim(),
+                    type: 'DELETE',
+                    success: function(result) {
+                    }
+               });
+           }
+        },
+        advanced: {
+          columnLabel: 'Actions',
+          buttonHTML: `<div class="btn-group pull-right">
+            <button id="bEdit" type="button" class="btn btn-sm btn-default">
+              <span class="fa fa-edit" > </span>
+            </button>
+            <button id="bDel" type="button" class="btn btn-sm btn-default">
+              <span class="fa fa-trash" > </span>
+            <button id="bAcep" type="button" class="btn btn-sm btn-default" style="display:none;">
+              <span class="fa fa-check-circle" > </span>
+            </button>
+            <button id="bCanc" type="button" class="btn btn-sm btn-default" style="display:none;">
+              <span class="fa fa-times-circle" > </span>
+            </button>
+          </div>`
+        }
+        });
+    };
+
+
+ function getAllComments(bookId) {
+
+    lastBookId = bookId;
+
+    var commentDto = {
+      bookId: lastBookId
+    };
+    $.get("/books/" + bookId.toString().trim() + "/comments").done(function (comments) {
+        $('#commentTable tbody').empty();
+        if(comments.length < 1){
+          $('#commentTable tbody').append(`
+                    <tr>
+                        <td></th>
+                        <td></td>
+                    </tr>
+                `)
+          }
+
+        else {
+          comments.forEach(function (comment) {
+            $('#commentTable tbody').append(`
+                      <tr>
+                          <td>${comment.id}</th>
+                          <td>${comment.text}</td>
+                      </tr>
+                     `)
+            });
+        }
+        commentsTable.refresh();
+
+      });
+  }
+
+
+$('#commentsPopup').popup({
+  pagecontainer: '#page',
+  escape: false,
+   onclose: function() {
+     $('#commentTable tbody').empty();
+  },
+ onopen: function(){
+    commentsTable = getCommentTable();
+ }
+});
+
+
+var commentsTable;
+var booksTable = getBooksTable();
+var lastBookId;
+
+<!-- start-->
+getAllBooks();
+
+
+
+
+    </script>
+</div>
+</body>
+
+</html>
