@@ -84,7 +84,7 @@ public class CommentsServiceImplTest {
 
     @DisplayName("Insert cooment by commentService")
     @Test
-    void insertComment() {
+    void addComment() {
 
         given(bookRepository.findById(TEST_BOOK_FROM_DB.getId())).willReturn(Optional.of(TEST_BOOK_FROM_DB));
         given(commentRepository.save(any(Comment.class))).willReturn(NEW_TEST_COMMENT);
@@ -92,12 +92,12 @@ public class CommentsServiceImplTest {
         Assertions.assertThat(commentService.add(
                 NEW_TEST_COMMENT.getBook().getId(),
                 NEW_TEST_COMMENT.getText()))
-                .isEqualTo(NEW_TEST_COMMENT.getId());
+                .isEqualTo(NEW_TEST_COMMENT);
     }
 
     @DisplayName("Delete comment by id with commentService")
     @Test
-    void deleteBookById() {
+    void deleteCommentById() {
         commentService.deleteById(TEST_COMMENT_FROM_DB.getId());
         given(commentRepository.count()).willReturn(EXPECTED_COMMENT_COUNT - 1);
         Assertions.assertThat(commentService.count()).isEqualTo(EXPECTED_COMMENT_COUNT - 1);

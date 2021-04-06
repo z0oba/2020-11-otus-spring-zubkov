@@ -47,10 +47,10 @@ public class CommentServiceImp implements CommentService {
 
     @Override
     @Transactional
-    public long add(long bookId, String text) {
+    public Comment add(long bookId, String text) {
         Optional<Book> book = bookRepository.findById(bookId);
         if (book.isPresent()) {
-            return commentRepository.save(new Comment(text, book.get())).getId();
+            return commentRepository.save(new Comment(text, book.get()));
         } else
             throw new CommentServiceException("Can`t find book with id " + bookId);
     }
@@ -64,7 +64,7 @@ public class CommentServiceImp implements CommentService {
     @Override
     @Transactional
     public long updateById(long id, String text) {
-        if(commentRepository.findById(id).isEmpty())
+        if (commentRepository.findById(id).isEmpty())
             throw new CommentServiceException("Can`t find comment with id " + id);
         else {
             Comment comment = commentRepository.findById(id).get();

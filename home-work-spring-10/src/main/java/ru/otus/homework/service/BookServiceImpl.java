@@ -43,7 +43,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public long add(String name, String authorName, String genreName) {
+    public Book add(String name, String authorName, String genreName) {
         Author author = authorRepository.findByName(authorName);
         if (author == null)
             author = authorRepository.save(new Author(authorName));
@@ -52,17 +52,17 @@ public class BookServiceImpl implements BookService {
         if (genre == null)
             genre = genreRepository.save(new Genre(genreName));
 
-        Book book = bookRepository.save(new Book(name, author, genre));
-        return book.getId();
+        return bookRepository.save(new Book(name, author, genre));
     }
 
     @Override
     @Transactional
     public long updateById(long id, String name, String authorName, String genreName) {
-        if(bookRepository.findById(id).isEmpty())
+        if (bookRepository.findById(id).isEmpty())
             throw new BookServiceException("Can`t find book by id for update");
-        else{
+        else {
             Book book = bookRepository.findById(id).get();
+
             Author author = authorRepository.findByName(authorName);
             if (author == null)
                 author = authorRepository.save(new Author(authorName));
@@ -71,6 +71,7 @@ public class BookServiceImpl implements BookService {
             if (genre == null)
                 genre = genreRepository.save(new Genre(genreName));
 
+            book.setName(name);
             book.setAuthor(author);
             book.setGenre(genre);
 

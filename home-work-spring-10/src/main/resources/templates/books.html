@@ -13,6 +13,7 @@
               width: 100%;
               height: 100%;
             }
+
     </style>
     <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
     <script src="/webjars/jquery-ui/1.12.1/jquery-ui.js"></script>
@@ -80,6 +81,18 @@ function showCommentsTable(bookId){
   getAllComments(bookId);
 }
 
+function updateRowId(row, id){
+    $(row).find('td').eq(0).text(id);
+}
+
+function removeEmptyRows(table){
+    $(table).find('tr').each(function() {
+        if($(this).find('td').eq(0).text().trim() === '' && $(this).index() != 0){ //empty row
+        	this.remove();
+        }
+    });
+}
+
 function getBooksTable(){
   return new BookBsTable("bookTable",{
         editableColumns:"1,2,3",
@@ -95,45 +108,44 @@ function getBooksTable(){
 
            if(bookDto.id > 0){
              $.ajax({
-                  url: "/api/book/update",
-                  type: "POST",
+                  url: "/books/" + (bookDto.id).toString(),
+                  type: "PUT",
                   data: JSON.stringify(bookDto),
                   dataType: 'json',
                   async: false,
                   contentType: 'application/json; charset=utf-8',
                   success: function(msg) {
-                    getAllBooks();
+                      removeEmptyRows($('#bookTable'));
                   }
               });
           }
           else{
               $.ajax({
-                  url: "/api/book/add",
+                  url: "/books",
                   type: "POST",
                   data: JSON.stringify(bookDto),
                   dataType: 'json',
                   async: false,
                   contentType: 'application/json; charset=utf-8',
-                  success: function(msg) {
-                    getAllBooks();
+                  success: function(bookDto) {
+                        updateRowId(row, bookDto.id);
+                        removeEmptyRows($('#bookTable'));
                   }
               });
           }
         },
         onBeforeDelete: function(row) {
-           var bookDto = {
-               id: $(row).find('td').eq(0).text()
-           };
-           $.ajax({
-                url: "/api/book/delete",
-                type: "POST",
-                data: JSON.stringify(bookDto),
-                dataType: 'json',
-                async: false,
-                contentType: 'application/json; charset=utf-8',
-                success: function(msg) {
-                }
-           });},
+           var bookId = $(row).find('td').eq(0).text();
+           if(bookId >= 0){
+               $.ajax({
+                    url: "/books/" + (bookId).toString(),
+                    type: "DELETE",
+                    success: function(msg) {
+                    }
+               });
+           }
+        },
+
         advanced: {
           columnLabel: 'Actions',
           buttonHTML: `<div class="btn-group pull-right">
@@ -178,7 +190,7 @@ class BookBsTable extends BSTable {
 
 
   function getAllBooks() {
-    $.get('/api/books').done(function (books) {
+    $.get('/books').done(function (books) {
         $('#bookTable tbody').empty();
           books.forEach(function (book) {
                 $('#bookTable tbody').append(`
@@ -211,44 +223,44 @@ var lastBookId;
 
            if( commentDto.id > 0){
                $.ajax({
-                    url: "/api/book/comment/update",
-                    type: "POST",
+                    url: "/comments/" + (commentDto.id).toString(),
+                    type: "PUT",
                     data: JSON.stringify(commentDto),
                     dataType: 'json',
                     async: false,
-                    contentType: 'application/json; charset=utf-8'
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(commentDto) {
+                        removeEmptyRows($('#commentTable'));
+                    }
                });
            }
            else{
                $.ajax({
-                    url: "/api/book/comment/add",
+                    url: "/books/" + lastBookId.toString().trim() + "/comments",
                     type: "POST",
                     data: JSON.stringify(commentDto),
                     dataType: 'json',
                     async: false,
-                    contentType: 'application/json; charset=utf-8'
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(commentDto) {
+                        updateRowId(row, commentDto.id);
+                        removeEmptyRows($('#commentTable'));
+                    }
                });
            }
 
-           getAllComments(lastBookId);
-
         },
         onBeforeDelete: function(row) {
-           <!-- json object -->
-           var commentDto = {
-               id: $(row).find('td').eq(0).text()
-           };
-
-           $.ajax({
-                url: "/api/book/comment/delete",
-                type: "POST",
-                data: JSON.stringify(commentDto),
-                dataType: 'json',
-                async: false,
-                contentType: 'application/json; charset=utf-8',
-                success: function(msg) {
-                }
-           });},
+           var commentId = $(row).find('td').eq(0).text()
+           if(commentId >= 0){
+               $.ajax({
+                    url: '/comments/' + (commentId).toString().trim(),
+                    type: 'DELETE',
+                    success: function(result) {
+                    }
+               });
+           }
+        },
         advanced: {
           columnLabel: 'Actions',
           buttonHTML: `<div class="btn-group pull-right">
@@ -268,6 +280,7 @@ var lastBookId;
         });
     };
 
+
  function getAllComments(bookId) {
 
     lastBookId = bookId;
@@ -275,16 +288,7 @@ var lastBookId;
     var commentDto = {
       bookId: lastBookId
     };
-    $.ajax({
-      url: "/api/book/comments",
-      type: "POST",
-      data: JSON.stringify(commentDto),
-      dataType: 'json',
-      async: false,
-      contentType: 'application/json; charset=utf-8',
-      success: function(msg) {
-      }
-    }).done(function (comments) {
+    $.get("/books/" + bookId.toString().trim() + "/comments").done(function (comments) {
         $('#commentTable tbody').empty();
         if(comments.length < 1){
           $('#commentTable tbody').append(`
@@ -329,6 +333,7 @@ var lastBookId;
 
 <!-- start-->
 getAllBooks();
+
 
 
 
