@@ -13,3 +13,7 @@ insert into books (id, `name`,  author_id, genre_id) values (3, 'Master and Marg
 insert into comments (id, `text`, book_id) values (1, 'It`s ok!', 1);
 insert into comments (id, `text`, book_id) values (2, 'Not bad', 2);
 insert into comments (id, `text`, book_id) values (3, 'Awesome', 3);
+
+insert into users (id, `username`, `password`) values (1, 'admin', 'password');
+insert into users (id, `username`, `password`) values (2, 'user', 'god');
+insert into users (id, `username`, `password`) values (3, 'root', 'password123');

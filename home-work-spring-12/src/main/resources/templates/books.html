@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--<html lang="en">-->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+
 <head>
     <meta charset="UTF-8"/>
     <title>Books main page</title>
@@ -14,6 +19,7 @@
               height: 100%;
             }
 
+
     </style>
     <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
     <script src="/webjars/jquery-ui/1.12.1/jquery-ui.js"></script>
@@ -27,8 +33,13 @@
     <!-- Font Awesome -->
     <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" rel="stylesheet">
+
+    <meta th:content="${_csrf.token}" th:name="_csrf"/>
+    <meta th:content="${_csrf.headerName}" th:name="_csrf_header"/>
+
 </head>
 <body>
+
 
 <!--For working with books comments -->
 <section id="commentsPopup">
@@ -70,6 +81,17 @@
 
 
     <script>
+
+<!-- for work with spring csrf-->
+$(function() {
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+        if (options.type == "POST" || options.type == "PUT" || options.type == "DELETE") {
+            xhr.setRequestHeader(header, token);
+        }
+    });
+});
 
 function setCommentsTableTitle(titleText){
   $('#commentsListTable').find('#commentsTableTitle').text(titleText);
@@ -333,8 +355,6 @@ var lastBookId;
 
 <!-- start-->
 getAllBooks();
-
-
 
 
     </script>

@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequiredArgsConstructor
-public class BookPageController {
-    @GetMapping("/")
-    public String getBooksPage() {
-        return "books";
+public class LoginPageController {
+    @GetMapping("/login")
+    public String getLoginPage() {
+        return "/login";
     }
 }
