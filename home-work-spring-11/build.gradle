@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+}
+
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.springframework.boot' , name: 'spring-boot-starter', version: '2.4.2'
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.4.2'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.4.2'
+    //reactive mongo db
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb-reactive', version: '2.4.2'
+    implementation group: 'org.mongodb', name: 'mongodb-driver-reactivestreams', version: '3.12.8'
+
+    //mongock
+    implementation group: 'com.github.cloudyrock.mongock', name: 'mongock-spring-v5', version: '4.1.17'
+    implementation group: 'com.github.cloudyrock.mongock', name: 'mongodb-springdata-v3-driver', version: '4.1.17'
+    //for mongock working
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: '2.4.2'
+    implementation group: 'org.mongodb', name: 'mongodb-driver-sync', version: '3.12.8'
+
+
+    //jqery
+    implementation group: 'org.webjars', name: 'jquery', version: '3.3.1'
+    implementation 'org.webjars:jquery-ui:1.12.1'
+
+    //embedded db
+    compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
+
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+
+    //testing
+    testImplementation (group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.4.2'){
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation group: 'io.projectreactor', name: 'reactor-test', version: '3.4.5'
+
+    testCompile 'org.junit.jupiter:junit-jupiter:5.4.2'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '3.6.28'
+    testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.6.28'
+    testCompile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.20'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+}
