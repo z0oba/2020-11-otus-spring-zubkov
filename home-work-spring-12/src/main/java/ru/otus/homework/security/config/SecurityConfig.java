@@ -14,6 +14,7 @@ import ru.otus.homework.service.UserService;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     private final UserService userService;
 
     @Override
@@ -32,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        //implements PasswordEncoder and overide encode method with the MD5 protocol
+        //implements PasswordEncoder and override encode method with the MD5 protocol
 //        return new BCryptPasswordEncoder();
         return NoOpPasswordEncoder.getInstance();
     }

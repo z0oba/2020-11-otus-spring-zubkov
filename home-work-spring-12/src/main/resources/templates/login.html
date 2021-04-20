@@ -1,22 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
 >
-<!--<head>-->
-<!--    <title>Spring Security Example </title>-->
-<!--    <div th:replace="fragments/header :: header-css"/>-->
-<!--</head>-->
-<style type="text/css">
-            .popup_content {
-              margin: 10px;
-              padding: 0 10px;
-              max-width: 80%;
-              border: 2px solid #444;
-              background: white;
-              width: 100%;
-              height: 100%;
-            }
-
-</style>
 
 <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
 <!-- Bootstrap core CSS-->
@@ -27,11 +11,10 @@
 
 <body>
 
-
 <div class="container">
 
     <div class="row" style="margin-top:20px">
-        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+        <div class="class form">
             <form method="post" th:action="@{/login}">
                 <fieldset>
                     <h1>Please Sign In</h1>
@@ -57,11 +40,11 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="button class">
                             <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign In"/>
                         </div>
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                        </div>
+                        <!--                        <div class="col-xs-6 col-sm-6 col-md-6">-->
+                        <!--                        </div>-->
                     </div>
                 </fieldset>
             </form>
