@@ -70,7 +70,10 @@ public class BookController {
                     return commentRepository.save(commentDto); })
                 .flatMap(comment -> {
                     Book book = comment.getBook();
-                    book.setComments(List.of(comment));
+                    if(book.getComments() == null)
+                        book.setComments(List.of(comment));
+                    else
+                        book.getComments().add(comment);
                     return bookRepository.save(book);
                 });
     }
