@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Some book controller tests")
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS) //clean context astre test for working with @DataMongoTest at other tests
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS) //clean context after tests for working with @DataMongoTest at other tests
 public class BookControllerTest {
 
     private final Book testBook = new Book("test_book_name", "test_author", "test_genre");
