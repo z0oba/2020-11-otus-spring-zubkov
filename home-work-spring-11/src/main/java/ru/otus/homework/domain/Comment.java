@@ -1,8 +1,12 @@
 package ru.otus.homework.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -10,8 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "comments")
-@Getter
-@Setter
+@ToString(exclude = "book")
 public class Comment {
 
 
@@ -21,11 +24,15 @@ public class Comment {
     @Field("text")
     private String text;
 
-//    @DBRef
-//    private Book book;
+    @DBRef
+    private Book book;
 
-    public Comment(String text /*, Book book*/) {
+    public Comment(String text, Book book) {
         this.text = text;
-//        this.book = book;
+        this.book = book;
+    }
+
+    public Comment(String text) {
+        this.text = text;
     }
 }

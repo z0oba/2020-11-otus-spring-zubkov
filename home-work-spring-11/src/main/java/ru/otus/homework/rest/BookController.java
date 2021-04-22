@@ -1,6 +1,7 @@
 package ru.otus.homework.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -9,6 +10,8 @@ import ru.otus.homework.domain.Book;
 import ru.otus.homework.domain.Comment;
 import ru.otus.homework.repo.BookRepository;
 import ru.otus.homework.repo.CommentRepository;
+
+import java.util.List;
 
 
 @RestController
@@ -21,7 +24,8 @@ public class BookController {
     @GetMapping("/books")
     @ResponseStatus(HttpStatus.OK)
     public Flux<Book> getAllBooks() {
-        return bookRepository.findAll();
+        return
+                bookRepository.findAll();
     }
 
     @PutMapping("/books/{bookId}")
@@ -38,7 +42,9 @@ public class BookController {
     @DeleteMapping("/books/{bookId}")
     @ResponseStatus(HttpStatus.OK)
     public Mono<Void> deleteBook(@PathVariable String bookId) {
-        return bookRepository.deleteById(bookId);
+        return bookRepository.findById(bookId)
+                .flatMap(book -> commentRepository.deleteAll(book.getComments())) //delete comments of book
+                .then(bookRepository.deleteById(bookId)); //then delete book
     }
 
     @PostMapping("/books")
@@ -49,19 +55,24 @@ public class BookController {
 
     @GetMapping("/books/{bookId}/comments")
     public Flux<Comment> getAllCommentsForBook(@PathVariable String bookId) {
-        return bookRepository.findById(bookId).flatMapIterable(Book::getComments);
+        return bookRepository.findById(bookId).flatMapIterable(book -> {
+            return book.getComments();
+        });
     }
 
     @PostMapping("/books/{bookId}/comments")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Book> addCommentForBook(@RequestBody Comment commentDto, @PathVariable String bookId) {
-        return bookRepository.findById(bookId).flatMap(book -> commentRepository.findByText(commentDto.getText())
-                .flatMap(
-                        comment -> {
-                            book.getComments().add(comment);
-                            return bookRepository.save(book);
-                        }
-                ));
+        return bookRepository.findById(bookId)
+                .flatMap(book -> {
+                    commentDto.setId(new ObjectId().toString());
+                    commentDto.setBook(book);
+                    return commentRepository.save(commentDto); })
+                .flatMap(comment -> {
+                    Book book = comment.getBook();
+                    book.setComments(List.of(comment));
+                    return bookRepository.save(book);
+                });
     }
 
     @PutMapping("/comments/{commentId}")
@@ -77,11 +88,5 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     public Mono<Void> deleteComment(@PathVariable String commentId) {
         return commentRepository.deleteById(commentId);
-    }
-
-    @PostMapping("/comments")
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<Comment> addComment(@RequestBody Comment commentDto) {
-        return commentRepository.save(commentDto);
     }
 }

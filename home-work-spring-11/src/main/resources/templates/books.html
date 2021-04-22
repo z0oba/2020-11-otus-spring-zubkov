@@ -235,20 +235,7 @@ var lastBookId;
                });
            }
            else{
-               $.ajax({
-                    url: "/comments",
-                    type: "POST",
-                    data: JSON.stringify(comment),
-                    dataType: 'json',
-                    async: false,
-                    contentType: 'application/json; charset=utf-8',
-                    success: function(commentKek) {
-                            setCommentForBook(commentKek, lastBookId);
-<!--                        getAllComments(lastBookId);-->
-<!--                        updateRowId(row, comment.id);-->
-<!--                        removeEmptyRows($('#commentTable'));-->
-                    }
-               });
+                setCommentForBook(comment, lastBookId);
            }
 
         },
