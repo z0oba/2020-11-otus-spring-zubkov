@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      port: 8089
+      database: testdb
+#  shell:
+#    interactive:
+#      enabled: true
+mongock:
+  enabled: true
+#  runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package: ru.otus.homework.mongock.changelog
