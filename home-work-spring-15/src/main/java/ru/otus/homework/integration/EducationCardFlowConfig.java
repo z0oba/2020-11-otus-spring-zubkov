@@ -32,17 +32,17 @@ public class EducationCardFlowConfig {
         return MessageChannels.publishSubscribe().get();
     }
 
-    @Bean(name = PollerMetadata.DEFAULT_POLLER )
-    public PollerMetadata poller () {
-        return Pollers.fixedRate(100).maxMessagesPerPoll(2).get() ;
+    @Bean(name = PollerMetadata.DEFAULT_POLLER)
+    public PollerMetadata poller() {
+        return Pollers.fixedRate(100).maxMessagesPerPoll(2).get();
     }
 
     @Bean
     public IntegrationFlow workFlow() {
         return IntegrationFlows.from("studentChannel")
                 .handle(studentIdService, "registerStudent")
-                .handle(courseSelectionService,"selectCoursesForStudent")
-                .handle(mentorAssignmentService,"assignMentorFoStudent")
+                .handle(courseSelectionService, "selectCoursesForStudent")
+                .handle(mentorAssignmentService, "assignMentorFoStudent")
                 .channel("educationCardChannel")
                 .get();
     }

@@ -6,7 +6,6 @@ import ru.otus.homework.domain.EducationCard;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 import static ru.otus.homework.utils.RandomUtils.randomString;
 
@@ -19,12 +18,13 @@ public class CourseSelectionService {
         Thread.sleep(new Random().nextInt(5) * 1000);
 
         int numberOfCourses = new Random().nextInt(10);
-        List<String> courses =  new ArrayList<>();
-        for(int i=0; i < numberOfCourses; i++)
+        List<String> courses = new ArrayList<>();
+        for (int i = 0; i < numberOfCourses; i++)
             courses.add(randomString());
         educationCard.setCourses(courses);
 
-        System.out.println("Курсы назначены");
+        System.out.println("Курсы назначены:");
+        courses.forEach(System.out::println);
 
         return educationCard;
     }

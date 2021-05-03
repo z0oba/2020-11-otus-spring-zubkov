@@ -18,7 +18,7 @@ public class StudentIdService {
         educationCard.setStudent(student);
         educationCard.setId(UUID.randomUUID().toString());
 
-        System.out.println("Студент зарегистрирован");
+        System.out.println("Студент зарегистрирован c id " + educationCard.getId());
 
         return educationCard;
     }

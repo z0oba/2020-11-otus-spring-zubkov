@@ -2,6 +2,7 @@ package ru.otus.homework.service;
 
 import org.springframework.stereotype.Service;
 import ru.otus.homework.domain.EducationCard;
+
 import java.util.Random;
 
 import static ru.otus.homework.utils.RandomUtils.randomString;
@@ -15,7 +16,7 @@ public class MentorAssignmentService {
 
         educationCard.setMentor(randomString());
 
-        System.out.println("Наставник для студента назначен");
+        System.out.println("Назначен наставник " + educationCard.getMentor());
 
         return educationCard;
     }
