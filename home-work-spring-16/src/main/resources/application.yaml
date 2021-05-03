@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    schema: classpath:schema.sql
+    data: classpath:data.sql
+    initialization-mode: always
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+server:
+  port: 8080
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,logfile
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: false
+#    diskspace:
+#      enabled: true
+#logging:
+#  file:
+#    name: logfile.txt
