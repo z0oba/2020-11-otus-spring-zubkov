@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 @Component
 @RequiredArgsConstructor
-public class DbHealthCheckActuator implements HealthIndicator {
+public class DbHealthIndicator implements HealthIndicator {
 
     private final DataSource dataSource;
 

@@ -22,6 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/actuator", "/actuator/**").hasAuthority("ADMIN") //for admin only
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
