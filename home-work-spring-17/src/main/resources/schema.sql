@@ -1,48 +1,51 @@
---SET MODE MYSQL;
-DROP TABLE IF EXISTS AUTHORS;
-CREATE TABLE AUTHORS(
-ID BIGINT AUTO_INCREMENT PRIMARY KEY,
-NAME VARCHAR(255) UNIQUE
+set foreign_key_checks = 0;
+
+drop table if exists authors;
+create table authors(
+id bigint auto_increment primary key,
+name varchar(255) unique
 );
 
-DROP TABLE IF EXISTS GENRES;
-CREATE TABLE GENRES(
-ID BIGINT AUTO_INCREMENT PRIMARY KEY,
-NAME VARCHAR(255) UNIQUE
+drop table if exists genres;
+create table genres(
+id bigint auto_increment primary key,
+name varchar(255) unique
 );
 
-DROP TABLE IF EXISTS BOOKS;
-CREATE TABLE BOOKS(
-ID BIGINT PRIMARY KEY AUTO_INCREMENT,
-NAME VARCHAR(255),
-AUTHOR_ID BIGINT,
-CONSTRAINT BOOKS_AUTHORS_FK
-FOREIGN KEY (AUTHOR_ID) REFERENCES AUTHORS(ID),
-GENRE_ID BIGINT,
-CONSTRAINT BOOKS_GENRE_FK
-FOREIGN KEY (GENRE_ID) REFERENCES GENRES(ID)
+drop table if exists books;
+create table books(
+id bigint primary key auto_increment,
+name varchar(255),
+author_id bigint,
+constraint books_authors_fk
+foreign key (author_id) references authors(id),
+genre_id bigint,
+constraint books_genre_fk
+foreign key (genre_id) references genres(id)
 );
 
-DROP TABLE IF EXISTS COMMENTS;
-CREATE TABLE COMMENTS(
-ID BIGINT PRIMARY KEY AUTO_INCREMENT,
-TEXT VARCHAR(255),
-BOOK_ID BIGINT,
-CONSTRAINT COMMENTS_BOOKS_FK
-FOREIGN KEY (BOOK_ID) REFERENCES BOOKS(ID)
-ON DELETE CASCADE
+drop table if exists comments;
+create table comments(
+id bigint primary key auto_increment,
+text varchar(255),
+book_id bigint,
+constraint comments_books_fk
+foreign key (book_id) references books(id)
+on delete cascade
 );
 
-DROP TABLE IF EXISTS USERS;
-CREATE TABLE USERS(
-ID BIGINT PRIMARY KEY AUTO_INCREMENT,
-USERNAME VARCHAR(255) UNIQUE,
-PASSWORD VARCHAR(255)
+drop table if exists users;
+create table users(
+id bigint primary key auto_increment,
+username varchar(255) unique,
+password varchar(255)
 );
 
 
-DROP TABLE IF EXISTS ROLES;
-CREATE TABLE USER_ROLES(
-USER_ID BIGINT,
-ROLES VARCHAR(255)
+drop table if exists user_roles;
+create table user_roles(
+user_id bigint,
+roles varchar(255)
 );
+
+set foreign_key_checks = 1;

@@ -37,9 +37,10 @@ dependencies {
 
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.24'
 
-    testImplementation 'com.h2database:h2:1.4.200'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'com.h2database:h2:1.4.200'
 
     testImplementation('org.springframework.security:spring-security-test')
     testImplementation('org.springframework.boot:spring-boot-starter-test') {

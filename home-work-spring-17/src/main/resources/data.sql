@@ -21,4 +21,3 @@ insert into users (id, `username`, `password`) values (3, 'guest', 'guest');
 insert into user_roles (user_id, `roles`) values (1, 'ADMIN');
 insert into user_roles (user_id, `roles`) values (2, 'USER');
 insert into user_roles (user_id, `roles`) values (3, 'GUEST');
---insert into user_roles (user_id, `roles`) values (3, 'USER');
