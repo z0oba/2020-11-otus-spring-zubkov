@@ -15,6 +15,7 @@ services:
       DB_URL: jdbc:mysql://mysqldb:3306/mysqldb
     depends_on:
       - db
+    command: ["./wait-for-it.sh", "db:3306", "--", "java","-jar","/opt/app/app.jar"]
   db:
     container_name: mysqldb
     image: mysql/mysql-server:8.0.24
