@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: ${DB_URL}
+#    username: ${MY_SQL_USER}
+#    password: ${MY_SQL_PASSWORD}
+    url: jdbc:mysql://127.0.0.1:3306/mysql
+    username: root
+    password: root
+    schema: classpath:schema.sql
+    data: classpath:data.sql
+    initialization-mode: always
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+server:
+  port: 8080
