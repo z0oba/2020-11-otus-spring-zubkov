@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.10.RELEASE'
+    id 'org.springframework.boot' version '2.3.7.RELEASE'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java'
 }
@@ -17,8 +17,18 @@ configurations {
     }
 }
 
+ext {
+    set('springCloudVersion', "Hoxton.SR9")
+}
+
 repositories {
     mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 dependencies {
@@ -31,9 +41,10 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
 
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.8.RELEASE'
+//    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.8.RELEASE'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
 
-    implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
+//    implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
     implementation group: 'org.webjars', name: 'jquery', version: '3.3.1'
     implementation 'org.webjars:jquery-ui:1.12.1'
 

@@ -52,11 +52,11 @@ public class BookServiceImpl implements BookService {
     public Book add(String name, String authorName, String genreName) {
         Author author = authorRepository.findByName(authorName);
         if (author == null)
-            author = new Author(authorName);
+            author = authorRepository.save(new Author(authorName));
 
         Genre genre = genreRepository.findByName(genreName);
         if (genre == null)
-            genre = new Genre(genreName);
+            genre = genreRepository.save(new Genre(genreName));
 
         return bookRepository.save(new Book(name, author, genre));
     }
@@ -72,11 +72,12 @@ public class BookServiceImpl implements BookService {
 
             Author author = authorRepository.findByName(authorName);
             if (author == null)
-                author = new Author(authorName);
+                author = authorRepository.save(new Author(authorName));
 
             Genre genre = genreRepository.findByName(genreName);
             if (genre == null)
-                genre = new Genre(genreName);
+                genre = genreRepository.save(new Genre(genreName));
+
 
             book.setName(name);
             book.setAuthor(author);
