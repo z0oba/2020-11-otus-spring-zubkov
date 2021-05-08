@@ -27,3 +27,13 @@ management:
 logging:
   file:
     name: logfile.txt
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+      fallback:
+        enabled: false
+      circuitBreaker:
+        enabled: false
