@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+>
+<link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<!-- Bootstrap core CSS-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/flatly/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" rel="stylesheet">
+
+<body>
+
+<div class="container">
+
+    <div class="row" style="margin-top:20px">
+        <div class="class form">
+            <form method="post" th:action="@{/login}">
+                <fieldset>
+                    <h1>Please Sign In</h1>
+
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger">
+                            Invalid username and password.
+                        </div>
+                    </div>
+                    <div th:if="${param.logout}">
+                        <div class="alert alert-info">
+                            You have been logged out.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input autofocus="true" class="form-control input-lg" id="username" name="username"
+                               placeholder="UserName" required="true" type="text"/>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control input-lg" id="password" name="password" placeholder="Password"
+                               required="true" type="password"/>
+                    </div>
+                        <div class="button class">
+                            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign In"/>
+                        </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+</html>
